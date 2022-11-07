@@ -1,0 +1,14 @@
+.container {
+}
+
+/* .container a:hover {
+    color: red;
+} */
+
+.container a:hover svg {
+    transform: translateX(4px);
+}
+
+.container a svg {
+    transition: transform 0.2s ease;
+}
