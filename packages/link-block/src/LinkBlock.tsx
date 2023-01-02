@@ -28,7 +28,7 @@ export const LinkBlock: FC<Props> = ({ appBridge }) => {
         } else {
             return <div>Set link in Settings</div>;
         }
-    } else if (titleValue && linkValue.link) {
+    } else if (linkValue.link && (titleValue || linkValue.link.title)) {
         return (
             <div className={style.container}>
                 <a
@@ -37,7 +37,7 @@ export const LinkBlock: FC<Props> = ({ appBridge }) => {
                     target={linkValue.openInNewTab ? '_blank' : ''}
                     rel="noreferrer"
                 >
-                    <span className="group-hover:tw-text-red-30">{titleValue}</span>
+                    <span className="group-hover:tw-text-red-30">{titleValue ? titleValue : linkValue.link.title}</span>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"

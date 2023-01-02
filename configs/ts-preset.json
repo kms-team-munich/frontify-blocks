@@ -9,10 +9,11 @@
     "noImplicitThis": true,
     "sourceMap": true,
     "strict": true,
+    "target": "es2017",
     "jsx": "react-jsx",
+    "lib": ["ES2021", "DOM"],
     "resolveJsonModule": true,
-    "baseUrl": ".",
-    "types": ["cypress", "cypress-real-events", "@4tw/cypress-drag-drop"]
-  },
-  "exclude": ["**/dist", "**/node_modules"]
+    "types": ["cypress"],
+    "skipLibCheck": true
+  }
 }
