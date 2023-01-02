@@ -2,7 +2,6 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "isolatedModules": true,
-    "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -12,7 +11,12 @@
     "jsx": "react-jsx",
     "resolveJsonModule": true,
     "baseUrl": ".",
-    "types": ["cypress", "cypress-real-events", "@4tw/cypress-drag-drop"]
+    "types": [
+      "node",
+      "cypress",
+      "cypress-real-events",
+      "@4tw/cypress-drag-drop"
+    ]
   },
   "exclude": ["**/dist", "**/node_modules"]
 }

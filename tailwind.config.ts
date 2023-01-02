@@ -1,10 +1,8 @@
 import type { Config } from 'tailwindcss'
 import plugin from 'tailwindcss/plugin'
-import fondue from '@frontify/fondue/tailwind'
 
 const config = <Partial<Config>>{
-  presets: [fondue],
-  content: ['./{packages,examples}/*/src/**/*.{ts,tsx}'],
+  presets: [require('@frontify/fondue/tailwind')],
   corePlugins: {
     preflight: false,
   },
@@ -22,6 +20,7 @@ const config = <Partial<Config>>{
             21: 'rgb(32 35 39)',
           },
         },
+        test: '#ff00ff',
       },
     },
   },

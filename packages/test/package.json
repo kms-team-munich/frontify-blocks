@@ -1,7 +1,6 @@
 {
-  "name": "example",
+  "name": "test",
   "private": true,
-  "author": "Frontify Developers <developers@frontify.com>",
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {

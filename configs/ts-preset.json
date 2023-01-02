@@ -2,7 +2,6 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "isolatedModules": true,
-    "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -13,7 +12,7 @@
     "jsx": "react-jsx",
     "lib": ["ES2021", "DOM"],
     "resolveJsonModule": true,
-    "types": ["cypress"],
+    "types": ["node", "cypress"],
     "skipLibCheck": true
   }
 }

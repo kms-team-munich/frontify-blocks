@@ -1,8 +1,8 @@
 import { defineBlock } from '@frontify/guideline-blocks-settings'
-import { ExampleBlock } from './ExampleBlock'
+import { TestBlock } from './TestBlock'
 import { settings } from './settings'
 
 export default defineBlock({
-  block: ExampleBlock,
+  block: TestBlock,
   settings,
 })

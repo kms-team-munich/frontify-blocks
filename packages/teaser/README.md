@@ -1,1 +1,1 @@
-# Zeiss Frontify Teaser Block
+# Zeiss Teaser Block
