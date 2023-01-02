@@ -4,12 +4,20 @@ import {
     DesignTokenName,
     DesignTokenProperties,
     DesignTokenPropertiesEnum,
-    DesignTokens,
     DirectionalCssProperties,
     TokenValues,
     TransformedDesignTokens,
 } from '../hooks/useGuidelineDesignTokens';
+import { suffixPlainNumberWithPx } from '../utilities/suffixPlainNumberWithPx';
 import { provideDefaultCalloutColors } from './provideDefaultCalloutColors';
+
+const TokenNameMapper: Record<string, DesignTokenName> = {
+    button_primary: 'buttonPrimary',
+    button_secondary: 'buttonSecondary',
+    button_tertiary: 'buttonTertiary',
+    'image-caption': 'imageCaption',
+    body: 'p',
+};
 
 const transformDesignTokens = (dataToTransform: DesignTokenProperties) => {
     const cssStyles: TokenValues = {};
@@ -26,10 +34,10 @@ const transformDesignTokens = (dataToTransform: DesignTokenProperties) => {
 
 const transformObjectValues = (key: string, cssStyles: TokenValues, value: DirectionalCssProperties) => {
     if (key === DesignTokenPropertiesEnum.frame) {
-        cssStyles.paddingTop = value.top;
-        cssStyles.paddingRight = value.right;
-        cssStyles.paddingBottom = value.bottom;
-        cssStyles.paddingLeft = value.left;
+        cssStyles.paddingTop = suffixPlainNumberWithPx(value.top);
+        cssStyles.paddingRight = suffixPlainNumberWithPx(value.right);
+        cssStyles.paddingBottom = suffixPlainNumberWithPx(value.bottom);
+        cssStyles.paddingLeft = suffixPlainNumberWithPx(value.left);
     }
 };
 
@@ -108,12 +116,13 @@ const transformStringValues = (key: string, cssStyles: TokenValues, value: strin
     }
 };
 
-export const mapToGuidelineDesignTokens = (dataToTransform: DesignTokens) => {
+export const mapToGuidelineDesignTokens = (dataToTransform: Partial<Record<string, DesignTokenProperties>>) => {
     const transformedDesignTokens: TransformedDesignTokens = {};
     const enrichedDataToTransform = provideDefaultCalloutColors(dataToTransform);
 
     for (const [key, value] of Object.entries(enrichedDataToTransform)) {
-        transformedDesignTokens[key as DesignTokenName] = transformDesignTokens(value) as TokenValues;
+        const designTokenName = TokenNameMapper[key] ?? key;
+        transformedDesignTokens[designTokenName] = transformDesignTokens(value) as TokenValues;
     }
     return transformedDesignTokens;
 };

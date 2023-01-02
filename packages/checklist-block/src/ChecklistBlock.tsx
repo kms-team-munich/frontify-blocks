@@ -14,12 +14,8 @@ import {
     OrderableListItem,
 } from '@frontify/fondue';
 import '@frontify/fondue-tokens/styles';
-import {
-    generatePaddingString,
-    joinClassNames,
-    paddingStyleMap,
-    toHex8String,
-} from '@frontify/guideline-blocks-shared';
+import { BlockProps } from '@frontify/guideline-blocks-settings';
+import { joinClassNames, toHex8String, useGuidelineDesignTokens } from '@frontify/guideline-blocks-shared';
 import { useHover } from '@react-aria/interactions';
 import { FC, useState } from 'react';
 import 'tailwindcss/tailwind.css';
@@ -35,29 +31,18 @@ import {
     updateItemById,
 } from './helpers';
 import { SettingsContext } from './SettingsContext';
-import { ChecklistContent, ChecklistItemMode, ChecklistProps, DefaultValues, ProgressBarType, Settings } from './types';
+import { ChecklistContent, ChecklistItemMode, DefaultValues, ProgressBarType, Settings } from './types';
 import { reorderList } from './utilities';
 
-export const ChecklistBlock: FC<ChecklistProps> = ({ appBridge }: ChecklistProps) => {
+export const ChecklistBlock: FC<BlockProps> = ({ appBridge }) => {
     const isEditing = useEditorState(appBridge);
     const [blockSettings, setBlockSettings] = useBlockSettings<Partial<Settings>>(appBridge);
     const [showCompleted, setShowCompleted] = useState(true);
+    const { designTokens } = useGuidelineDesignTokens();
     const { hoverProps, isHovered } = useHover({});
     const settings = { ...DefaultValues, ...blockSettings };
 
-    const {
-        hasExtendedCustomPadding,
-        extendedPaddingTop,
-        extendedPaddingRight,
-        extendedPaddingBottom,
-        extendedPaddingLeft,
-        extendedPaddingChoice,
-        content,
-        progressBarVisible,
-        progressBarFillColor,
-        progressBarTrackColor,
-        progressBarType,
-    } = settings;
+    const { content, progressBarVisible, progressBarFillColor, progressBarTrackColor, progressBarType } = settings;
 
     const addNewItem = (text: string): void => {
         const trimmed = text.trim();
@@ -66,23 +51,22 @@ export const ChecklistBlock: FC<ChecklistProps> = ({ appBridge }: ChecklistProps
         }
         const newItem = createItem(trimmed, content.length | 0);
         const updatedContent = [...content, newItem];
-        setBlockSettings({ ...blockSettings, content: updatedContent });
+        setBlockSettings({ content: updatedContent });
     };
 
     const removeItem = (idToDelete: string): Promise<void> =>
         setBlockSettings({
-            ...blockSettings,
             content: content.filter(({ id }) => id !== idToDelete),
         });
 
     const updateItem = (idToUpdate: string, properties: Partial<ChecklistContent>) =>
-        setBlockSettings({ ...blockSettings, content: updateItemById(content, idToUpdate, properties) });
+        setBlockSettings({ content: updateItemById(content, idToUpdate, properties) });
 
     const toggleCompletedVisibility = () => setShowCompleted((prev) => !prev);
 
     const moveByIncrement = (id: string, positionChange: number) => {
         const index = findIndexById(content, id);
-        setBlockSettings({ ...blockSettings, content: reorderList(content, index, index + positionChange) });
+        setBlockSettings({ content: reorderList(content, index, index + positionChange) });
     };
 
     const renderChecklistItem = (
@@ -106,6 +90,7 @@ export const ChecklistBlock: FC<ChecklistProps> = ({ appBridge }: ChecklistProps
                         updatedAt: Date.now(),
                     })
                 }
+                designTokens={designTokens ?? {}}
                 dragState={componentDragState}
                 onMoveItem={moveByIncrement}
                 onRemoveItem={removeItem}
@@ -134,7 +119,7 @@ export const ChecklistBlock: FC<ChecklistProps> = ({ appBridge }: ChecklistProps
             return { ...item };
         });
 
-        setBlockSettings({ ...blockSettings, content: modifiedArray });
+        setBlockSettings({ content: modifiedArray });
     };
 
     const orderableListItems = displayableItems.map(
@@ -153,20 +138,7 @@ export const ChecklistBlock: FC<ChecklistProps> = ({ appBridge }: ChecklistProps
 
     return (
         <SettingsContext.Provider value={settings}>
-            <div
-                data-test-id="checklist-block"
-                className="tw-relative"
-                style={{
-                    padding: hasExtendedCustomPadding
-                        ? generatePaddingString([
-                              extendedPaddingTop,
-                              extendedPaddingLeft,
-                              extendedPaddingRight,
-                              extendedPaddingBottom,
-                          ])
-                        : paddingStyleMap[extendedPaddingChoice],
-                }}
-            >
+            <div data-test-id="checklist-block" className="tw-relative">
                 <div className="tw-relative" {...hoverProps}>
                     {shouldShowProgress && progressBarType === ProgressBarType.Bar && (
                         <ProgressBar
@@ -217,7 +189,11 @@ export const ChecklistBlock: FC<ChecklistProps> = ({ appBridge }: ChecklistProps
                     {isEditing && (
                         <>
                             <hr className="tw-my-2 tw-border-black-40" />
-                            <ChecklistItem mode={ChecklistItemMode.Create} onTextModified={addNewItem} />
+                            <ChecklistItem
+                                mode={ChecklistItemMode.Create}
+                                designTokens={designTokens ?? {}}
+                                onTextModified={addNewItem}
+                            />
                         </>
                     )}
                 </div>

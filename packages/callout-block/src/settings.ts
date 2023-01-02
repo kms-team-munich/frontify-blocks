@@ -1,16 +1,20 @@
 /* (c) Copyright Frontify Ltd., all rights reserved. */
 
-import type { FileExtension } from '@frontify/app-bridge';
-import { AssetChooserObjectType } from '@frontify/app-bridge';
-import { AssetInputSize, DropdownSize, IconEnum, MultiInputLayout } from '@frontify/fondue';
-import { BlockSettings, Bundle, NotificationStyleType } from '@frontify/guideline-blocks-settings';
 import {
+    AssetChooserObjectType,
+    AssetInputSize,
+    DropdownSize,
+    FileExtension,
+    IconEnum,
+    MultiInputLayout,
+    NotificationStyleType,
     appendUnit,
-    getExtendedBorderRadiusSettings,
+    defineSettings,
     numericalOrPixelRule,
     presetCustomValue,
-} from '@frontify/guideline-blocks-shared';
-import { Alignment, Padding, Type, Width, leftRightPaddingMap, topBottomPaddingMap } from './types';
+} from '@frontify/guideline-blocks-settings';
+import { getExtendedBorderRadiusSettings } from '@frontify/guideline-blocks-shared';
+import { Alignment, Appearance, Icon, Padding, Type, Width, leftRightPaddingMap, topBottomPaddingMap } from './types';
 
 const PADDING_CHOICE_ID = 'paddingChoice';
 const PADDING_TOP_ID = 'paddingTop';
@@ -19,32 +23,32 @@ const PADDING_RIGHT_ID = 'paddingRight';
 const PADDING_BOTTOM_ID = 'paddingBottom';
 export const ICON_ASSET_ID = 'icon';
 
-export const settings: BlockSettings = {
+export const settings = defineSettings({
     main: [
         {
             id: 'type',
             type: 'dropdown',
             defaultValue: Type.Info,
-            size: 'Large' as DropdownSize.Large,
+            size: DropdownSize.Large,
             choices: [
                 {
                     value: Type.Info,
-                    icon: 'Info' as IconEnum.Info,
-                    label: 'Info',
+                    icon: IconEnum.Info,
+                    label: 'Information',
                 },
                 {
                     value: Type.Note,
-                    icon: 'DocumentText' as IconEnum.DocumentText,
+                    icon: IconEnum.DocumentText,
                     label: 'Note',
                 },
                 {
                     value: Type.Tip,
-                    icon: 'CheckMark' as IconEnum.CheckMark,
+                    icon: IconEnum.CheckMark,
                     label: 'Tip',
                 },
                 {
                     value: Type.Warning,
-                    icon: 'ExclamationMarkTriangle' as IconEnum.ExclamationMarkTriangle,
+                    icon: IconEnum.ExclamationMarkTriangle,
                     label: 'Warning',
                 },
             ],
@@ -52,17 +56,62 @@ export const settings: BlockSettings = {
     ],
     basics: [
         {
+            id: 'appearance',
+            type: 'slider',
+            label: 'Appearance',
+            defaultValue: Appearance.Light,
+            info: 'Defines how the accent color is shown on this block. Select between a subtle and more prominent style.',
+            choices: [
+                {
+                    label: 'Light',
+                    value: Appearance.Light,
+                },
+                {
+                    label: 'Strong',
+                    value: Appearance.Strong,
+                },
+            ],
+        },
+
+        {
             id: 'iconSwitch',
             type: 'switch',
             defaultValue: false,
+            switchLabel: 'Custom',
+            info: 'Custom icons will always display the same way, they were created. To tweak icon colors, apply the changes in the icon, then upload it again.',
             label: 'Icon',
             on: [
                 {
                     id: ICON_ASSET_ID,
                     type: 'assetInput',
                     size: AssetInputSize.Small,
-                    extensions: ['svg' as FileExtension.Svg],
+                    extensions: [FileExtension.Svg],
                     objectTypes: [AssetChooserObjectType.ImageVideo],
+                },
+            ],
+            off: [
+                {
+                    id: 'iconType',
+                    type: 'slider',
+                    defaultValue: Icon.None,
+                    choices: [
+                        {
+                            label: 'None',
+                            value: Icon.None,
+                        },
+                        {
+                            icon: IconEnum.Info,
+                            value: Icon.Info,
+                        },
+                        {
+                            icon: IconEnum.Lightbulb,
+                            value: Icon.Lightbulb,
+                        },
+                        {
+                            icon: IconEnum.Megaphone,
+                            value: Icon.Megaphone,
+                        },
+                    ],
                 },
             ],
         },
@@ -99,17 +148,17 @@ export const settings: BlockSettings = {
                     choices: [
                         {
                             value: Alignment.Left,
-                            icon: 'ArrowAlignLeft' as IconEnum.ArrowAlignLeft,
+                            icon: IconEnum.ArrowAlignLeft,
                             label: 'Left',
                         },
                         {
                             value: Alignment.Center,
-                            icon: 'ArrowAlignVerticalCentre' as IconEnum.ArrowAlignVerticalCentre,
+                            icon: IconEnum.ArrowAlignVerticalCentre,
                             label: 'Center',
                         },
                         {
                             value: Alignment.Right,
-                            icon: 'ArrowAlignRight' as IconEnum.ArrowAlignRight,
+                            icon: IconEnum.ArrowAlignRight,
                             label: 'Right',
                         },
                     ],
@@ -121,7 +170,7 @@ export const settings: BlockSettings = {
                     switchLabel: 'Custom',
                     label: 'Padding',
                     info: 'The spacing around UI elements to create more negative space',
-                    onChange: (bundle: Bundle): void => {
+                    onChange: (bundle) => {
                         presetCustomValue(bundle, PADDING_CHOICE_ID, PADDING_TOP_ID, topBottomPaddingMap);
                         presetCustomValue(bundle, PADDING_CHOICE_ID, PADDING_BOTTOM_ID, topBottomPaddingMap);
                         presetCustomValue(bundle, PADDING_CHOICE_ID, PADDING_LEFT_ID, leftRightPaddingMap);
@@ -131,34 +180,34 @@ export const settings: BlockSettings = {
                         {
                             id: 'customPadding',
                             type: 'multiInput',
-                            layout: 'Spider' as MultiInputLayout.Spider,
+                            layout: MultiInputLayout.Spider,
                             blocks: [
                                 {
                                     id: PADDING_TOP_ID,
                                     type: 'input',
                                     icon: IconEnum.ArrowAlignUp16,
-                                    onChange: (bundle: Bundle): void => appendUnit(bundle, PADDING_TOP_ID),
+                                    onChange: (bundle) => appendUnit(bundle, PADDING_TOP_ID),
                                     rules: [numericalOrPixelRule],
                                 },
                                 {
                                     id: PADDING_LEFT_ID,
                                     type: 'input',
                                     icon: IconEnum.ArrowAlignLeft16,
-                                    onChange: (bundle: Bundle): void => appendUnit(bundle, PADDING_LEFT_ID),
+                                    onChange: (bundle) => appendUnit(bundle, PADDING_LEFT_ID),
                                     rules: [numericalOrPixelRule],
                                 },
                                 {
                                     id: PADDING_RIGHT_ID,
                                     type: 'input',
                                     icon: IconEnum.ArrowAlignRight16,
-                                    onChange: (bundle: Bundle): void => appendUnit(bundle, PADDING_RIGHT_ID),
+                                    onChange: (bundle) => appendUnit(bundle, PADDING_RIGHT_ID),
                                     rules: [numericalOrPixelRule],
                                 },
                                 {
                                     id: PADDING_BOTTOM_ID,
                                     type: 'input',
                                     icon: IconEnum.ArrowAlignDown16,
-                                    onChange: (bundle: Bundle): void => appendUnit(bundle, PADDING_BOTTOM_ID),
+                                    onChange: (bundle) => appendUnit(bundle, PADDING_BOTTOM_ID),
                                     rules: [numericalOrPixelRule],
                                 },
                             ],
@@ -207,4 +256,4 @@ export const settings: BlockSettings = {
             },
         },
     ],
-};
+});

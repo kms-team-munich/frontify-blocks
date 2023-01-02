@@ -3,13 +3,23 @@
 import { useBlockAssets, useBlockSettings, useEditorState } from '@frontify/app-bridge';
 import { RichTextEditor } from '@frontify/fondue';
 import '@frontify/fondue-tokens/styles';
-import { isDark, joinClassNames, radiusStyleMap, useGuidelineDesignTokens } from '@frontify/guideline-blocks-shared';
+import {
+    hasRichTextValue,
+    isDark,
+    joinClassNames,
+    radiusStyleMap,
+    setAlpha,
+    useGuidelineDesignTokens,
+} from '@frontify/guideline-blocks-shared';
 import { FC } from 'react';
 import 'tailwindcss/tailwind.css';
+import { CalloutIcon } from './components/CalloutIcon';
 import { ICON_ASSET_ID } from './settings';
-import { BlockSettings, CalloutBlockProps, Type, Width, alignmentMap, outerWidthMap, paddingMap } from './types';
+import { Appearance, BlockSettings, Icon, Type, Width, alignmentMap, outerWidthMap, paddingMap } from './types';
+import { useCalloutColors } from './utils/useCalloutColors';
+import type { BlockProps } from '@frontify/guideline-blocks-settings';
 
-export const CalloutBlock: FC<CalloutBlockProps> = ({ appBridge }) => {
+export const CalloutBlock: FC<BlockProps> = ({ appBridge }) => {
     const [blockSettings, setBlockSettings] = useBlockSettings<BlockSettings>(appBridge);
     const isEditing = useEditorState(appBridge);
     const { blockAssets } = useBlockAssets(appBridge);
@@ -20,7 +30,7 @@ export const CalloutBlock: FC<CalloutBlockProps> = ({ appBridge }) => {
         blockSettings.width === Width.HugContents && alignmentMap[blockSettings.alignment],
     ]);
 
-    const getBackgroundColor = (type: Type) => {
+    const getAccentColor = (type: Type) => {
         switch (type) {
             case Type.Info:
                 return designTokens?.callout?.info;
@@ -33,18 +43,23 @@ export const CalloutBlock: FC<CalloutBlockProps> = ({ appBridge }) => {
         }
     };
 
-    const textDivClassNames = joinClassNames([
-        'tw-flex tw-items-center',
-        isDark(getBackgroundColor(blockSettings.type)) ? 'tw-text-white' : 'tw-text-black',
-        blockSettings.width === Width.FullWidth && alignmentMap[blockSettings.alignment],
-        !blockSettings.hasCustomPadding && paddingMap[blockSettings.paddingChoice],
-    ]);
-
     const customPaddingStyle = {
         padding: blockSettings.hasCustomPadding
             ? `${blockSettings.paddingTop} ${blockSettings.paddingRight} ${blockSettings.paddingBottom} ${blockSettings.paddingLeft}`
             : '',
     };
+
+    const color = getAccentColor(blockSettings.type);
+    const backgroundColor = blockSettings.appearance === Appearance.Strong ? color : setAlpha(0.1, color);
+
+    const defaultTextColor = isDark(color) ? 'white' : 'black';
+    const textColor = blockSettings.appearance === Appearance.Light ? color : defaultTextColor;
+
+    const textDivClassNames = joinClassNames([
+        'tw-flex tw-items-center',
+        blockSettings.width === Width.FullWidth && alignmentMap[blockSettings.alignment],
+        !blockSettings.hasCustomPadding && paddingMap[blockSettings.paddingChoice],
+    ]);
 
     const customCornerRadiusStyle = {
         borderRadius: blockSettings.hasExtendedCustomRadius
@@ -54,7 +69,7 @@ export const CalloutBlock: FC<CalloutBlockProps> = ({ appBridge }) => {
 
     const iconUrl = blockSettings.iconSwitch ? blockAssets?.[ICON_ASSET_ID]?.[0]?.genericUrl : '';
 
-    const onTextChange = (value: string) => setBlockSettings({ textValue: value });
+    const onTextChange = (value: string) => value !== blockSettings.textValue && setBlockSettings({ textValue: value });
 
     return (
         <div data-test-id="callout-block" className={containerDivClassNames}>
@@ -62,22 +77,26 @@ export const CalloutBlock: FC<CalloutBlockProps> = ({ appBridge }) => {
                 data-test-id="callout-wrapper"
                 className={textDivClassNames}
                 style={{
-                    backgroundColor: getBackgroundColor(blockSettings.type),
+                    backgroundColor,
                     ...customPaddingStyle,
                     ...customCornerRadiusStyle,
                 }}
             >
-                {blockSettings.iconSwitch && iconUrl && (
-                    <span className="tw-mr-3 tw-flex-none tw-w-6 tw-h-6">
-                        <img data-test-id="callout-icon" alt="Callout icon" src={iconUrl} />
-                    </span>
+                {blockSettings.iconType === Icon.None || (blockSettings.iconSwitch && !iconUrl) ? null : (
+                    <CalloutIcon
+                        iconUrl={iconUrl}
+                        isActive={hasRichTextValue(blockSettings.textValue)}
+                        iconType={blockSettings.iconSwitch ? Icon.Custom : blockSettings.iconType}
+                        color={textColor}
+                    />
                 )}
                 <RichTextEditor
                     onTextChange={onTextChange}
+                    onBlur={onTextChange}
                     readonly={!isEditing}
                     value={blockSettings.textValue}
                     placeholder="Type your text here"
-                    designTokens={designTokens ?? undefined}
+                    designTokens={useCalloutColors(designTokens, textColor)}
                 />
             </div>
         </div>

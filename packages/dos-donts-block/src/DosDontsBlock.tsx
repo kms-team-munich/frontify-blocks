@@ -2,6 +2,7 @@
 
 import { useBlockSettings, useEditorState } from '@frontify/app-bridge';
 import '@frontify/fondue-tokens/styles';
+import { BlockProps } from '@frontify/guideline-blocks-settings';
 import { joinClassNames } from '@frontify/guideline-blocks-shared';
 import { FC, useEffect, useState } from 'react';
 import 'tailwindcss/tailwind.css';
@@ -12,14 +13,13 @@ import {
     DoDontSpacing,
     DoDontStyle,
     DoDontType,
-    DosDontsBlockProps,
     Item,
     Settings,
     columnsClasses,
     spacingValues,
 } from './types';
 
-export const DosDontsBlock: FC<DosDontsBlockProps> = ({ appBridge }) => {
+export const DosDontsBlock: FC<BlockProps> = ({ appBridge }) => {
     const [blockSettings, setBlockSettings] = useBlockSettings<Settings>(appBridge);
     const isEditing = useEditorState(appBridge);
 
@@ -55,7 +55,6 @@ export const DosDontsBlock: FC<DosDontsBlockProps> = ({ appBridge }) => {
         updatedItems[existingItemIndex] = { ...updatedItems[existingItemIndex], [type]: value };
 
         setBlockSettings({
-            ...blockSettings,
             items: [...updatedItems],
         });
     };

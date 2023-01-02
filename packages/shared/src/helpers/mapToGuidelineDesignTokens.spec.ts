@@ -66,7 +66,7 @@ const mockedDesignTokens = {
     quote: {
         italic: '1',
     },
-    button_primary: {
+    buttonPrimary: {
         family: 'inherit',
         size: '13px',
         color: 'rgba(102,102,102,1)',
@@ -75,22 +75,22 @@ const mockedDesignTokens = {
         border_color: 'rgba(207, 207, 207, 1)',
         border_color_hover: 'rgba(155, 155, 155, 1)',
         frame: {
-            top: 10,
-            right: 20,
-            bottom: 10,
-            left: 20,
+            top: '10rem',
+            right: '20',
+            bottom: '10',
+            left: '20',
         },
         background_color_hover: 'rgba(172, 172, 172, 1)',
     },
-    button_secondary: {},
-    button_tertiary: {
+    buttonSecondary: {},
+    buttonTertiary: {
         size: '14px',
         color: 'rgb(255, 246, 0)',
         frame: {
-            top: 11,
-            left: 21,
-            right: 21,
-            bottom: 11,
+            top: '11',
+            left: '21',
+            right: '21',
+            bottom: '11',
         },
         family: 'Arial',
         italic: '1',
@@ -166,7 +166,7 @@ const expectedTransformedDesignTokens = {
     custom3: {
         fontFamily: 'Roboto',
     },
-    body: {
+    p: {
         fontSize: '14px',
         color: '#333',
     },
@@ -176,7 +176,7 @@ const expectedTransformedDesignTokens = {
     quote: {
         fontStyle: 'italic',
     },
-    button_primary: {
+    buttonPrimary: {
         hover: {
             color: 'rgba(76, 76, 76, 1)',
             backgroundColor: 'rgba(172, 172, 172, 1)',
@@ -185,15 +185,15 @@ const expectedTransformedDesignTokens = {
         fontFamily: 'inherit',
         fontSize: '13px',
         backgroundColor: 'rgba(230,230,230,1)',
-        paddingTop: 10,
-        paddingRight: 20,
-        paddingBottom: 10,
-        paddingLeft: 20,
+        paddingTop: '10rem',
+        paddingRight: '20px',
+        paddingBottom: '10px',
+        paddingLeft: '20px',
         color: 'rgba(102,102,102,1)',
         borderColor: 'rgba(207, 207, 207, 1)',
     },
-    button_secondary: {},
-    button_tertiary: {
+    buttonSecondary: {},
+    buttonTertiary: {
         hover: {
             color: 'rgb(194, 185, 223)',
             borderColor: 'rgb(255, 7, 212)',
@@ -201,10 +201,10 @@ const expectedTransformedDesignTokens = {
         },
         fontSize: '14px',
         color: 'rgb(255, 246, 0)',
-        paddingTop: 11,
-        paddingRight: 21,
-        paddingBottom: 11,
-        paddingLeft: 21,
+        paddingTop: '11px',
+        paddingRight: '21px',
+        paddingBottom: '11px',
+        paddingLeft: '21px',
         fontFamily: 'Arial',
         fontStyle: 'italic',
         fontWeight: '900',
@@ -233,21 +233,21 @@ describe('mapToGuidelineDesignTokens', () => {
 
     it('should transform uppercase to textTransform', () => {
         const result = mapToGuidelineDesignTokens({ body: { uppercase: '1' } });
-        expect(result).toMatchObject({ body: { textTransform: 'uppercase' } });
+        expect(result).toMatchObject({ p: { textTransform: 'uppercase' } });
     });
 
     it('should transform italic to fontStyle', () => {
         const result = mapToGuidelineDesignTokens({ body: { italic: '1' } });
-        expect(result).toMatchObject({ body: { fontStyle: 'italic' } });
+        expect(result).toMatchObject({ p: { fontStyle: 'italic' } });
     });
 
     it('should transform underline to textDecoration', () => {
         const result = mapToGuidelineDesignTokens({ body: { underline: '1' } });
-        expect(result).toMatchObject({ body: { textDecoration: 'underline' } });
+        expect(result).toMatchObject({ p: { textDecoration: 'underline' } });
     });
 
     it('should transform color value', () => {
         const result = mapToGuidelineDesignTokens({ body: { color: '#fff' } });
-        expect(result).toMatchObject({ body: { color: '#fff' } });
+        expect(result).toMatchObject({ p: { color: '#fff' } });
     });
 });

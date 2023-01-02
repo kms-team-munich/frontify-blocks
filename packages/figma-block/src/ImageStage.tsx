@@ -1,7 +1,8 @@
 /* (c) Copyright Frontify Ltd., all rights reserved. */
 
-import { joinClassNames } from '@frontify/guideline-blocks-shared';
+import { joinClassNames, radiusStyleMap, toHex8String } from '@frontify/guideline-blocks-shared';
 import { DrawFullScreenActionButton, DrawZoomInOutButtons } from './components';
+import { getBorderOfBlock } from './helpers';
 import { DEFAULT_HEIGHT } from './settings';
 import { ImageStageProps } from './types';
 import { useImageStage } from './useImageStage';
@@ -13,17 +14,26 @@ export const ImageStage = ({
     height = DEFAULT_HEIGHT,
     hasBorder = false,
     hasBackground = false,
+    isMobile = false,
+    backgroundColor,
+    borderColor,
+    borderStyle,
+    borderWidth,
+    hasRadius,
+    radiusChoice,
+    radiusValue,
 }: ImageStageProps) => {
     const { stageRef, containerRef, imageRef, isFullScreen, setIsFullScreen, onZoomIn, onZoomOut, setIsImageLoaded } =
-        useImageStage({ height, hasLimitedOptions });
-
+        useImageStage({ height, hasLimitedOptions, isMobile });
     return (
         <div
+            style={{
+                border: getBorderOfBlock(hasBorder, borderStyle, borderWidth, borderColor),
+                borderRadius: hasRadius ? radiusValue : radiusStyleMap[radiusChoice],
+                backgroundColor: hasBackground && backgroundColor ? toHex8String(backgroundColor) : 'white',
+            }}
             className={joinClassNames([
-                'tw-border',
-                isFullScreen && 'tw-fixed tw-top-0 tw-left-0 tw-w-full tw-h-full tw-z-[200]',
-                hasBackground ? 'tw-bg-black-5' : 'tw-bg-white',
-                hasBorder ? 'tw-border-black-40' : 'tw-border-transparent',
+                isFullScreen && 'tw-fixed tw-border-do tw-top-0 tw-left-0 tw-w-full tw-h-full tw-z-[200]',
             ])}
         >
             <div className="tw-group tw-w-full tw-relative tw-overflow-hidden">

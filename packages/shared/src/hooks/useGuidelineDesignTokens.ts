@@ -38,19 +38,20 @@ export type DesignTokenName =
     | 'custom1'
     | 'custom2'
     | 'custom3'
-    | 'body'
+    | 'p'
     | 'link'
     | 'quote'
-    | 'button_primary'
-    | 'button_secondary'
-    | 'button_tertiary'
-    | 'callout';
+    | 'buttonPrimary'
+    | 'buttonSecondary'
+    | 'buttonTertiary'
+    | 'callout'
+    | 'imageCaption';
 
 export type DirectionalCssProperties = {
-    top: number;
-    right: number;
-    bottom: number;
-    left: number;
+    top: string;
+    right: string;
+    bottom: string;
+    left: string;
 };
 
 export type AccentColorProperties = {
@@ -102,8 +103,8 @@ export const useGuidelineDesignTokens = () => {
                 const json = await response.json();
                 const transformedCategories = mapToGuidelineDesignTokens(json.hub.appearance);
                 setDesignTokens(transformedCategories);
-            } catch (err) {
-                setError(err);
+            } catch (error_) {
+                setError(error_);
             } finally {
                 setIsLoading(false);
             }

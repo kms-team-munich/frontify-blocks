@@ -1,6 +1,6 @@
 /* (c) Copyright Frontify Ltd., all rights reserved. */
 
-/* Sketchfab's model preview url used to be the same as the embed url (without "/embed"). 
+/* Sketchfab's model preview url used to be the same as the embed url (without "/embed").
     OLD: https://sketchfab.com/models/442c548d94744641ba279ae94b5f45ec
     NEW: https://sketchfab.com/3d-models/name-of-model-442c548d94744641ba279ae94b5f45ec
     EMBED: https://sketchfab.com/models/442c548d94744641ba279ae94b5f45ec/embed
@@ -33,7 +33,7 @@ const getUrlStringWithoutSearchParams = (url?: string) => {
         }
         const urlObj = new URL(url);
         return urlObj.origin + urlObj.pathname.replace(/\/$/, '');
-    } catch (e) {
+    } catch (error) {
         return '';
     }
 };
@@ -55,7 +55,7 @@ export const generateSketchfabEmbedUrl = (url: string) => {
         }
 
         throw 'Unsupported Sketchfab URL';
-    } catch (e) {
+    } catch (error) {
         return '';
     }
 };

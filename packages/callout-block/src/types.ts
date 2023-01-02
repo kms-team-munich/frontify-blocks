@@ -1,6 +1,5 @@
 /* (c) Copyright Frontify Ltd., all rights reserved. */
 
-import type { AppBridgeBlock } from '@frontify/app-bridge';
 import { RadiusExtendedSettings } from '@frontify/guideline-blocks-shared';
 
 export enum Type {
@@ -13,6 +12,11 @@ export enum Type {
 export enum Width {
     FullWidth = 'fullWidth',
     HugContents = 'hugContents',
+}
+
+export enum Appearance {
+    Light = 'light',
+    Strong = 'strong',
 }
 
 export const outerWidthMap: Record<Width, string> = {
@@ -39,10 +43,18 @@ export enum Padding {
 }
 
 export const paddingMap: Record<Padding, string> = {
-    [Padding.S]: 'tw-px-8 tw-py-4',
-    [Padding.M]: 'tw-px-8 tw-py-6',
-    [Padding.L]: 'tw-p-9',
+    [Padding.S]: 'tw-px-4 tw-py-3',
+    [Padding.M]: 'tw-px-[25px] tw-py-5',
+    [Padding.L]: 'tw-px-[30px] tw-py-[25px]',
 };
+
+export enum Icon {
+    None = 'none',
+    Info = 'info',
+    Lightbulb = 'lightbulb',
+    Megaphone = 'megaphone',
+    Custom = 'custom',
+}
 
 export type BlockSettings = {
     type: Type;
@@ -50,8 +62,10 @@ export type BlockSettings = {
     iconSwitch: boolean;
     width: Width;
     textValue?: string;
+    iconType: Icon;
     hasCustomPadding: boolean;
     paddingChoice: Padding;
+    appearance: Appearance;
 } & RadiusExtendedSettings &
     CustomPaddingStyles;
 
@@ -60,10 +74,6 @@ export type CustomPaddingStyles = {
     paddingRight: string;
     paddingBottom: string;
     paddingLeft: string;
-};
-
-export type CalloutBlockProps = {
-    appBridge: AppBridgeBlock;
 };
 
 export const topBottomPaddingMap: Record<Padding, string> = {
