@@ -11,6 +11,7 @@ const config = <Partial<Config>>{
       colors: {
         zeiss: {
           gray: {
+            2: 'rgb(248 250 252)',
             4: 'rgb(242 245 248)',
             5: 'rgb(236 240 244)',
             6: 'rgb(230 235 240)',
@@ -19,8 +20,9 @@ const config = <Partial<Config>>{
             11: 'rgb(164 176 188)',
             21: 'rgb(32 35 39)',
           },
+          black: 'rgb(0 0 0)',
+          white: 'rgb(255 255 255)',
         },
-        test: '#ff00ff',
       },
     },
   },

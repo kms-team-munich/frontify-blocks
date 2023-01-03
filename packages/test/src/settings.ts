@@ -1,19 +1,15 @@
-import { BlockSettings } from '@frontify/guideline-blocks-settings'
+import { defineSettings } from '@frontify/guideline-blocks-settings'
 
-export const settings: BlockSettings = {
+export const settings = defineSettings({
   main: [
     {
-      id: 'linkValue',
+      id: 'target',
       type: 'linkChooser',
     },
     {
-      id: 'titleValue',
+      id: 'title',
       type: 'input',
       label: 'Title overwrite',
     },
   ],
-  basics: [],
-  layout: [],
-  style: [],
-  security: [],
-}
+})

@@ -1,38 +1,48 @@
-import {
-  DropdownSize,
-  IconEnum,
-  defineSettings,
-} from '@frontify/guideline-blocks-settings'
+import { defineSettings } from '@frontify/guideline-blocks-settings'
 
 export const settings = defineSettings({
   main: [
     {
-      id: 'main-dropdown',
-      type: 'dropdown',
-      defaultValue: 'content_block',
-      size: DropdownSize.Large,
-      disabled: true,
-      choices: [
-        {
-          value: 'content_block',
-          icon: IconEnum.BuildingBlock,
-          label: 'Content Block',
-        },
-      ],
+      id: 'title',
+      type: 'input',
+      label: 'Title',
+    },
+    {
+      id: 'copy',
+      type: 'input',
+      label: 'Copy',
+    },
+    {
+      id: 'footer',
+      type: 'input',
+      label: 'Footer',
     },
   ],
   style: [
     {
-      id: 'color',
-      label: 'Text Color',
-      type: 'colorInput',
-      defaultValue: {
-        red: 113,
-        green: 89,
-        blue: 215,
-        alpha: 1,
-        name: 'Frontify Violet',
-      },
+      id: 'background',
+      label: 'Background(s)',
+      type: 'dropdown',
+      defaultValue: 'Light',
+      choices: [
+        {
+          value: 'Light',
+          label: 'Light',
+        },
+        {
+          value: 'Dark',
+          label: 'Dark',
+        },
+        {
+          value: 'Highlight',
+          label: 'Highlight',
+        },
+      ],
+    },
+    {
+      id: 'blackgroundGlobal',
+      label: 'Globaler Background',
+      type: 'switch',
     },
   ],
 })
