@@ -52,8 +52,23 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
     })
   }
 
-  const sortItems = (items: OrderableListItem<Item>[]) => {
-    console.log(items)
+  const sortItems = (modifiedItems: OrderableListItem<Item>[]) => {
+    const modifiedArray = items.map((item, index) => {
+      const matchingModifiedItem = modifiedItems.find(
+        (modifiedItem) => modifiedItem.id === item.id
+      )
+      if (matchingModifiedItem) {
+        return { ...matchingModifiedItem }
+      }
+
+      return { ...item, sort: index }
+    })
+
+    modifiedArray.sort(
+      (previousItem, currentItem) => previousItem.sort - currentItem.sort
+    )
+
+    setBlockSettings({ items: modifiedArray })
   }
 
   const renderEditable = (
