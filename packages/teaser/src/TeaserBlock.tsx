@@ -3,7 +3,15 @@ import { useBlockSettings, useEditorState } from '@frontify/app-bridge'
 
 import { SettingsContext } from './SettingsContext'
 import { TeaserItem } from './components/TeaserItem'
-import { createItem, updateItemById } from './helpers'
+import { TeaserItemEdit } from './components/TeaserItemEdit'
+import { updateItemById } from './helpers'
+
+import {
+  DragProperties,
+  ItemDragState,
+  OrderableList,
+  OrderableListItem,
+} from '@frontify/fondue'
 
 import { BlockProps } from '@frontify/guideline-blocks-settings'
 import { Item, Settings, TeaserItemMode } from './types'
@@ -17,15 +25,24 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
 
   const { items } = blockSettings
 
-  const addNewItem = (title: string): void => {
-    const trimmed = title.trim()
-    if (!trimmed) {
-      return
+  const orderableListItems: OrderableListItem<Item>[] = items.map(
+    (item: Item, index: number) => {
+      return {
+        ...item,
+        key: item.id,
+        alt: item.title,
+        sort: index,
+      }
     }
-    const newItem = createItem(trimmed)
-    const updatedItems = items?.length ? [...items, newItem] : [newItem]
-    setBlockSettings({ items: updatedItems })
-  }
+  )
+
+  // const addNewItem = (title = ''): void => {
+  //   const trimmed = title.trim()
+
+  //   const newItem = createItem(trimmed)
+  //   const updatedItems = items?.length ? [...items, newItem] : [newItem]
+  //   setBlockSettings({ items: updatedItems })
+  // }
 
   const updateItem = (idToUpdate: string, properties: Partial<Item>) => {
     const updatedItems = updateItemById(items, idToUpdate, properties)
@@ -35,12 +52,19 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
     })
   }
 
-  const renderTeaserItem = ({ title, id, link }: Item) => {
+  const sortItems = (items: OrderableListItem<Item>[]) => {
+    console.log(items)
+  }
+
+  const renderEditable = (
+    { title, id, link, image }: OrderableListItem<Item>,
+    { componentDragState }: DragProperties
+  ) => {
     const content = (
-      <TeaserItem
+      <TeaserItemEdit
         key={id}
-        item={{ title, id, link }}
-        mode={isEditing ? TeaserItemMode.Edit : TeaserItemMode.View}
+        item={{ title, id, link, image }}
+        mode={TeaserItemMode.Edit}
         onTitleModified={(title) => updateItem(id, { title })}
         onLinkModified={(value) =>
           updateItem(id, { link: { ...link, link: value } })
@@ -50,23 +74,37 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
         }
       />
     )
-
-    return content
+    // Preview is rendered in external DOM, requires own context provider
+    return componentDragState === ItemDragState.Preview ? (
+      <SettingsContext.Provider value={blockSettings}>
+        {content}
+      </SettingsContext.Provider>
+    ) : (
+      content
+    )
   }
 
   return (
     <SettingsContext.Provider value={blockSettings}>
-      <div className="tw-grid tw-grid-cols-2 tw-gap-2">
-        {items.map((item) => {
-          return renderTeaserItem(item)
-        })}
-        {isEditing && (
-          <TeaserItem
-            mode={TeaserItemMode.Create}
-            onTitleModified={addNewItem}
+      {!isEditing && (
+        <div className="tw-grid tw-grid-cols-2 tw-gap-2">
+          {items.map(({ title, id, link, image }: Item) => {
+            return <TeaserItem key={id} item={{ title, id, link, image }} />
+          })}
+        </div>
+      )}
+
+      {isEditing && (
+        <div>
+          <OrderableList
+            items={orderableListItems}
+            dragDisabled={!isEditing}
+            renderContent={renderEditable}
+            onMove={sortItems}
           />
-        )}
-      </div>
+          <TeaserItemEdit mode={TeaserItemMode.Create} />
+        </div>
+      )}
     </SettingsContext.Provider>
   )
 }

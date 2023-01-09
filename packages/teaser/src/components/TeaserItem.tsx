@@ -1,16 +1,9 @@
-import { TeaserBackground, TeaserItemMode, TeaserItemProps } from '../types'
-import { Button, ButtonSize, LinkChooser, TextInput } from '@frontify/fondue'
+import { TeaserBackground, TeaserItemProps } from '../types'
 import { SettingsContext } from '../SettingsContext'
 
 import { useContext } from 'react'
 
-export const TeaserItem = ({
-  item,
-  mode,
-  onTitleModified,
-  onLinkModified,
-  onOpenInNewTabModified,
-}: TeaserItemProps) => {
+export const TeaserItem = ({ item }: Pick<TeaserItemProps, 'item'>) => {
   const { background } = useContext(SettingsContext)
 
   const containerClasses = [
@@ -23,23 +16,7 @@ export const TeaserItem = ({
 
   return (
     <div className={containerClasses}>
-      {mode === TeaserItemMode.Edit && (
-        <div className="tw-h-full tw-flex tw-flex-col tw-gap-2">
-          <TextInput value={item?.title} onChange={onTitleModified} />
-          {onLinkModified && onOpenInNewTabModified && (
-            <LinkChooser
-              onLinkChange={onLinkModified}
-              onOpenInNewTabChange={onOpenInNewTabModified}
-              openInNewTab={item?.link?.openInNewTab || false}
-            />
-          )}
-          <span className="tw-mt-auto tw-self-end">
-            <Button size={ButtonSize.Small}>Delete</Button>
-          </span>
-        </div>
-      )}
-
-      {mode === TeaserItemMode.View && <h2>{item?.title}</h2>}
+      <h2>{item?.title}</h2>
     </div>
   )
 }

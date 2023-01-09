@@ -1,4 +1,4 @@
-import { SearchResult } from '@frontify/fondue'
+import { ImageAsset, SearchResult } from '@frontify/fondue'
 
 enum TeaserItemMode {
   Edit = 'Edit',
@@ -31,6 +31,7 @@ type Item = {
   title: string
   link: Link
   updatedAt: number
+  image: ImageAsset
 }
 
 type Settings = {
