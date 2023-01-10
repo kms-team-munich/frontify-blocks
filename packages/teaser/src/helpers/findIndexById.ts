@@ -1,5 +1,5 @@
 import { Key } from 'react'
 import { Item } from '../types'
 
-export const findIndexById = (content: Item[], id: Key): number =>
-  content.findIndex((item) => item.id === id)
+export const findIndexById = (items: Item[], id: Key): number =>
+  items.findIndex((item) => item.id === id)

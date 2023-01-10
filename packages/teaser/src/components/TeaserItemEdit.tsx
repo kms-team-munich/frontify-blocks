@@ -1,16 +1,15 @@
-import { TeaserBackground, TeaserItemProps } from '../types'
+import { TeaserItemProps } from '../types'
 import { Button, ButtonSize, LinkChooser, TextInput } from '@frontify/fondue'
-import { SettingsContext } from '../SettingsContext'
 
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 
 export const TeaserItemEdit = ({
   item,
   onTitleModified,
   onLinkModified,
+  onRemoveItem,
   onOpenInNewTabModified,
 }: TeaserItemProps) => {
-  const { background } = useContext(SettingsContext)
   const [title, setTitle] = useState(item?.title)
 
   const onTitleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
@@ -25,17 +24,9 @@ export const TeaserItemEdit = ({
     if (onTitleModified) onTitleModified(newValue)
   }
 
-  const containerClasses = [
-    'tw-p-4 hover:cursor-pointer',
-    background === TeaserBackground.Light &&
-      'tw-bg-zeiss-gray-2 text-zeiss-gray-19 hover:tw-bg-zeiss-gray-5',
-    background === TeaserBackground.Dark &&
-      'tw-bg-zeiss-gray-21 text-zeiss-gray-4 hover:tw-bg-zeiss-black',
-  ].join(' ')
-
   return (
-    <div className={containerClasses}>
-      <div className="tw-h-full tw-grid tw-grid-cols-2 tw-gap-2">
+    <div className="tw-p-5 hover:tw-cursor-pointer tw-border tw-border-dashed tw-border-[rgba(0,0,0,0.3)] hover:tw-border-black tw-flex tw-flex-col tw-gap-2">
+      <div className="tw-h-full tw-grid tw-grid-cols-2 tw-gap-5">
         <TextInput
           value={title}
           onChange={onTitleChange}
@@ -48,9 +39,14 @@ export const TeaserItemEdit = ({
             openInNewTab={item?.link?.openInNewTab || false}
           />
         )}
-        {/* <span className="tw-mt-auto tw-self-end">
-          <Button size={ButtonSize.Small}>Delete</Button>
-        </span> */}
+      </div>
+      <div className="tw-mt-auto tw-self-end">
+        <Button
+          size={ButtonSize.Small}
+          onClick={() => onRemoveItem && item && onRemoveItem(item.id)}
+        >
+          Delete
+        </Button>
       </div>
     </div>
   )

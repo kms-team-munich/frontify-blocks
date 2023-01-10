@@ -4,9 +4,11 @@ import { useBlockSettings, useEditorState } from '@frontify/app-bridge'
 import { SettingsContext } from './SettingsContext'
 import { TeaserItem } from './components/TeaserItem'
 import { TeaserItemEdit } from './components/TeaserItemEdit'
-import { updateItemById } from './helpers'
+import { createItem, updateItemById } from './helpers'
 
 import {
+  Button,
+  ButtonSize,
   DragProperties,
   ItemDragState,
   OrderableList,
@@ -36,23 +38,31 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
     }
   )
 
-  // const addNewItem = (title = ''): void => {
-  //   const trimmed = title.trim()
+  const addNewItem = (): void => {
+    const newItem = createItem()
+    const updatedItems = items?.length ? [...items, newItem] : [newItem]
+    setBlockSettings({ items: updatedItems })
+  }
 
-  //   const newItem = createItem(trimmed)
-  //   const updatedItems = items?.length ? [...items, newItem] : [newItem]
-  //   setBlockSettings({ items: updatedItems })
-  // }
-
-  const updateItem = (idToUpdate: string, properties: Partial<Item>) => {
+  const updateItem = (
+    idToUpdate: string,
+    properties: Partial<Item>
+  ): Promise<void> => {
     const updatedItems = updateItemById(items, idToUpdate, properties)
-    console.log('updatedItems', updatedItems)
-    setBlockSettings({
+    return setBlockSettings({
       items: updatedItems,
     })
   }
 
-  const sortItems = (modifiedItems: OrderableListItem<Item>[]) => {
+  const removeItem = (idToDelete: string): Promise<void> => {
+    return setBlockSettings({
+      items: items.filter(({ id }) => id !== idToDelete),
+    })
+  }
+
+  const sortItems = (
+    modifiedItems: OrderableListItem<Item>[]
+  ): Promise<void> => {
     const modifiedArray = items.map((item, index) => {
       const matchingModifiedItem = modifiedItems.find(
         (modifiedItem) => modifiedItem.id === item.id
@@ -68,7 +78,7 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
       (previousItem, currentItem) => previousItem.sort - currentItem.sort
     )
 
-    setBlockSettings({ items: modifiedArray })
+    return setBlockSettings({ items: modifiedArray })
   }
 
   const renderEditable = (
@@ -87,6 +97,7 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
         onOpenInNewTabModified={(value) =>
           updateItem(id, { link: { ...link, openInNewTab: value } })
         }
+        onRemoveItem={removeItem}
       />
     )
     // Preview is rendered in external DOM, requires own context provider
@@ -110,14 +121,19 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
       )}
 
       {isEditing && (
-        <div>
+        <div className="tw-flex tw-flex-col tw-gap-5">
           <OrderableList
             items={orderableListItems}
             dragDisabled={!isEditing}
             renderContent={renderEditable}
             onMove={sortItems}
           />
-          <TeaserItemEdit mode={TeaserItemMode.Create} />
+          <div className="tw-mt-auto tw-self-end">
+            <Button size={ButtonSize.Medium} onClick={() => addNewItem()}>
+              Add
+            </Button>
+          </div>
+          {/* <TeaserItemEdit mode={TeaserItemMode.Create} /> */}
         </div>
       )}
     </SettingsContext.Provider>
