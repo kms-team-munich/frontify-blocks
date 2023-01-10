@@ -1,6 +1,6 @@
 import { TeaserItemEditProps } from '../types'
 import { ImageEdit } from './ImageEdit'
-import { useBlockAssets } from '@frontify/app-bridge'
+import { Template, useBlockAssets } from '@frontify/app-bridge'
 import {
   Button,
   ButtonSize,
@@ -67,6 +67,16 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
       <div className="tw-mt-auto tw-self-end">
         <Button size={ButtonSize.Small} onClick={onDelete}>
           Delete
+        </Button>
+        <Button
+          size={ButtonSize.Small}
+          onClick={() =>
+            appBridge.openTemplateChooser((template: Template) =>
+              console.log(template)
+            )
+          }
+        >
+          Link
         </Button>
       </div>
     </div>

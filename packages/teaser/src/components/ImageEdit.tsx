@@ -47,9 +47,11 @@ export const ImageEdit: FC<ImageEditProps> = ({ appBridge, itemId }) => {
     appBridge.openAssetChooser(assetChooserCallback, {
       selectedValueId: blockAssets[itemId]?.[0]?.id,
       multiSelection: false,
-      extensions: ['jpg', 'png'],
+      extensions: ['jpg', 'png', 'svg'],
     })
   }
+
+  const asset = blockAssets?.[itemId]?.[0]
 
   return (
     <div className="tw-flex tw-flex-col tw-gap-4">
@@ -66,9 +68,9 @@ export const ImageEdit: FC<ImageEditProps> = ({ appBridge, itemId }) => {
         </Button>
       </div>
 
-      {blockAssets[itemId] && (
+      {asset && (
         <div className="tw-border tw-rounded tw-border-black-20">
-          <img src={blockAssets[itemId][0].previewUrl} />
+          <img src={asset.previewUrl} />
         </div>
       )}
     </div>

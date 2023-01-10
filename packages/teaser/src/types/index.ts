@@ -13,11 +13,11 @@ type ImageEditProps = BlockProps & {
 }
 
 type TeaserItemProps = {
+  appBridge: AppBridgeBlock
   item?: Omit<Item, 'updatedAt'>
 }
 
 type TeaserItemEditProps = TeaserItemProps & {
-  appBridge: AppBridgeBlock
   onLinkModified: (value: SearchResult | null) => void
   onTitleModified: (title: string) => void
   onOpenInNewTabModified: (value: boolean) => void

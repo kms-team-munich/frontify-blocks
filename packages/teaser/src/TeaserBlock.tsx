@@ -116,7 +116,9 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
       {!isEditing && (
         <div className="tw-grid tw-grid-cols-2 tw-gap-2">
           {items?.map((item: Item) => {
-            return <TeaserItem key={item.id} item={item} />
+            return (
+              <TeaserItem key={item.id} item={item} appBridge={appBridge} />
+            )
           })}
         </div>
       )}
