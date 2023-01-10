@@ -1,4 +1,5 @@
 import { Item } from '../types'
+import { AssetType } from '@frontify/fondue'
 
 export const createItem = (): Item => {
   const creationDate = Date.now()
@@ -9,11 +10,6 @@ export const createItem = (): Item => {
     title: '',
     link: { link: null, openInNewTab: false },
     updatedAt: creationDate,
-    image: {
-      type: 'image',
-      name: '',
-      extension: '',
-      size: 0,
-    },
+    image: {} as AssetType,
   }
 }

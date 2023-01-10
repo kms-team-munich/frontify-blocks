@@ -1,5 +1,13 @@
-import { TeaserItemProps } from '../types'
-import { Button, ButtonSize, LinkChooser, TextInput } from '@frontify/fondue'
+import { TeaserItemEditProps } from '../types'
+import { ImageEdit } from './ImageEdit'
+import {
+  Button,
+  ButtonSize,
+  LinkChooser,
+  MultiInput,
+  MultiInputLayout,
+  TextInput,
+} from '@frontify/fondue'
 
 import { useState } from 'react'
 
@@ -9,7 +17,8 @@ export const TeaserItemEdit = ({
   onLinkModified,
   onRemoveItem,
   onOpenInNewTabModified,
-}: TeaserItemProps) => {
+  appBridge,
+}: TeaserItemEditProps) => {
   const [title, setTitle] = useState(item?.title)
 
   const onTitleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
@@ -25,8 +34,8 @@ export const TeaserItemEdit = ({
   }
 
   return (
-    <div className="tw-p-5 hover:tw-cursor-pointer tw-border tw-border-dashed tw-border-[rgba(0,0,0,0.3)] hover:tw-border-black tw-flex tw-flex-col tw-gap-2">
-      <div className="tw-h-full tw-grid tw-grid-cols-2 tw-gap-5">
+    <div className="tw-relative tw-z-10 tw-p-5 hover:tw-cursor-pointer tw-border tw-border-dashed tw-border-[rgba(0,0,0,0.3)] hover:tw-border-black tw-flex tw-flex-col tw-gap-2">
+      <MultiInput layout={MultiInputLayout.Columns}>
         <TextInput
           value={title}
           onChange={onTitleChange}
@@ -39,7 +48,8 @@ export const TeaserItemEdit = ({
             openInNewTab={item?.link?.openInNewTab || false}
           />
         )}
-      </div>
+        <ImageEdit appBridge={appBridge} itemId={`item-${item?.id}`} />
+      </MultiInput>
       <div className="tw-mt-auto tw-self-end">
         <Button
           size={ButtonSize.Small}

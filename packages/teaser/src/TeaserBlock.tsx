@@ -16,7 +16,7 @@ import {
 } from '@frontify/fondue'
 
 import { BlockProps } from '@frontify/guideline-blocks-settings'
-import { Item, Settings, TeaserItemMode } from './types'
+import { Item, Settings } from './types'
 
 import 'tailwindcss/tailwind.css'
 
@@ -27,7 +27,7 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
 
   const { items } = blockSettings
 
-  const orderableListItems: OrderableListItem<Item>[] = items.map(
+  const orderableListItems: OrderableListItem<Item>[] = items?.map(
     (item: Item, index: number) => {
       return {
         ...item,
@@ -63,7 +63,7 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
   const sortItems = (
     modifiedItems: OrderableListItem<Item>[]
   ): Promise<void> => {
-    const modifiedArray = items.map((item, index) => {
+    const modifiedArray = items?.map((item, index) => {
       const matchingModifiedItem = modifiedItems.find(
         (modifiedItem) => modifiedItem.id === item.id
       )
@@ -89,7 +89,6 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
       <TeaserItemEdit
         key={id}
         item={{ title, id, link, image }}
-        mode={TeaserItemMode.Edit}
         onTitleModified={(title) => updateItem(id, { title })}
         onLinkModified={(value) =>
           updateItem(id, { link: { ...link, link: value } })
@@ -98,8 +97,10 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
           updateItem(id, { link: { ...link, openInNewTab: value } })
         }
         onRemoveItem={removeItem}
+        appBridge={appBridge}
       />
     )
+
     // Preview is rendered in external DOM, requires own context provider
     return componentDragState === ItemDragState.Preview ? (
       <SettingsContext.Provider value={blockSettings}>
@@ -114,8 +115,8 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
     <SettingsContext.Provider value={blockSettings}>
       {!isEditing && (
         <div className="tw-grid tw-grid-cols-2 tw-gap-2">
-          {items.map(({ title, id, link, image }: Item) => {
-            return <TeaserItem key={id} item={{ title, id, link, image }} />
+          {items?.map((item: Item) => {
+            return <TeaserItem key={item.id} item={item} />
           })}
         </div>
       )}
@@ -133,7 +134,6 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
               Add
             </Button>
           </div>
-          {/* <TeaserItemEdit mode={TeaserItemMode.Create} /> */}
         </div>
       )}
     </SettingsContext.Provider>

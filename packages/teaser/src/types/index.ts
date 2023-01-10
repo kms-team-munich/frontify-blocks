@@ -1,10 +1,5 @@
-import { ImageAsset, SearchResult } from '@frontify/fondue'
-
-enum TeaserItemMode {
-  Edit = 'Edit',
-  View = 'View',
-  Create = 'Create',
-}
+import { AssetType, SearchResult } from '@frontify/fondue'
+import { AppBridgeBlock } from '@frontify/app-bridge'
 
 enum TeaserBackground {
   Dark = 'Dark',
@@ -14,11 +9,14 @@ enum TeaserBackground {
 
 type TeaserItemProps = {
   item?: Omit<Item, 'updatedAt'>
-  mode: TeaserItemMode
-  onLinkModified?: (value: SearchResult | null) => void
-  onTitleModified?: (title: string) => void
-  onOpenInNewTabModified?: (value: boolean) => void
-  onRemoveItem?: (id: string) => void
+}
+
+type TeaserItemEditProps = TeaserItemProps & {
+  appBridge: AppBridgeBlock
+  onLinkModified: (value: SearchResult | null) => void
+  onTitleModified: (title: string) => void
+  onOpenInNewTabModified: (value: boolean) => void
+  onRemoveItem: (id: string) => void
 }
 
 type Link = {
@@ -31,7 +29,7 @@ type Item = {
   title: string
   link: Link
   updatedAt: number
-  image: ImageAsset
+  image: AssetType
 }
 
 type Settings = {
@@ -43,5 +41,5 @@ type Settings = {
   backgroundGlobal: boolean
 }
 
-export { TeaserItemMode, TeaserBackground }
-export type { TeaserItemProps, Item, Settings }
+export { TeaserBackground }
+export type { TeaserItemProps, TeaserItemEditProps, Item, Settings }
