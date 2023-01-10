@@ -1,5 +1,6 @@
 import { TeaserItemEditProps } from '../types'
 import { ImageEdit } from './ImageEdit'
+import { useBlockAssets } from '@frontify/app-bridge'
 import {
   Button,
   ButtonSize,
@@ -20,6 +21,7 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
   appBridge,
 }) => {
   const [title, setTitle] = useState(item?.title)
+  const { blockAssets, deleteAssetIdsFromKey } = useBlockAssets(appBridge)
 
   const onTitleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
     const target = event.target as HTMLInputElement
@@ -31,6 +33,18 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
   const onTitleChange = (newValue: string) => {
     setTitle(newValue)
     if (onTitleModified) onTitleModified(newValue)
+  }
+
+  const deleteAssets = (id: string) => {
+    const assets = blockAssets[id].map((asset) => asset.id)
+    deleteAssetIdsFromKey(id, assets)
+  }
+
+  const onDelete = () => {
+    if (item) {
+      onRemoveItem(item.id)
+      deleteAssets(item.id)
+    }
   }
 
   return (
@@ -48,13 +62,10 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
             openInNewTab={item?.link?.openInNewTab || false}
           />
         )}
-        <ImageEdit appBridge={appBridge} itemId={`item-${item?.id}`} />
+        <ImageEdit appBridge={appBridge} itemId={item?.id || 'default'} />
       </MultiInput>
       <div className="tw-mt-auto tw-self-end">
-        <Button
-          size={ButtonSize.Small}
-          onClick={() => onRemoveItem && item && onRemoveItem(item.id)}
-        >
+        <Button size={ButtonSize.Small} onClick={onDelete}>
           Delete
         </Button>
       </div>

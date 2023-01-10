@@ -27,16 +27,15 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
 
   const { items } = blockSettings
 
-  const orderableListItems: OrderableListItem<Item>[] = items?.map(
-    (item: Item, index: number) => {
+  const orderableListItems: OrderableListItem<Item>[] =
+    items?.map((item: Item, index: number) => {
       return {
         ...item,
         key: item.id,
         alt: item.title,
         sort: index,
       }
-    }
-  )
+    }) || []
 
   const addNewItem = (): void => {
     const newItem = createItem()
@@ -48,7 +47,8 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
     idToUpdate: string,
     properties: Partial<Item>
   ): Promise<void> => {
-    const updatedItems = updateItemById(items, idToUpdate, properties)
+    const mappedItems = items ? items : []
+    const updatedItems = updateItemById(mappedItems, idToUpdate, properties)
     return setBlockSettings({
       items: updatedItems,
     })
