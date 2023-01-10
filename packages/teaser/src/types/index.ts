@@ -1,10 +1,15 @@
 import { AssetType, SearchResult } from '@frontify/fondue'
+import { BlockProps } from '@frontify/guideline-blocks-settings'
 import { AppBridgeBlock } from '@frontify/app-bridge'
 
 enum TeaserBackground {
   Dark = 'Dark',
   Light = 'Light',
   Highlight = 'Highlight',
+}
+
+type ImageEditProps = BlockProps & {
+  itemId: string
 }
 
 type TeaserItemProps = {
@@ -42,4 +47,10 @@ type Settings = {
 }
 
 export { TeaserBackground }
-export type { TeaserItemProps, TeaserItemEditProps, Item, Settings }
+export type {
+  ImageEditProps,
+  TeaserItemProps,
+  TeaserItemEditProps,
+  Item,
+  Settings,
+}

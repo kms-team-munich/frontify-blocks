@@ -1,9 +1,9 @@
 import { TeaserBackground, TeaserItemProps } from '../types'
 import { SettingsContext } from '../SettingsContext'
 
-import { useContext } from 'react'
+import { FC, useContext } from 'react'
 
-export const TeaserItem = ({ item }: Pick<TeaserItemProps, 'item'>) => {
+export const TeaserItem: FC<TeaserItemProps> = ({ item }) => {
   const { background } = useContext(SettingsContext)
 
   const containerClasses = [

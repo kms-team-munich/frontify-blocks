@@ -5,14 +5,10 @@ import {
   useFileInput,
 } from '@frontify/app-bridge'
 import { Button, ButtonSize } from '@frontify/fondue'
-import { BlockProps } from '@frontify/guideline-blocks-settings'
 import { FC, useEffect, useState } from 'react'
+import { ImageEditProps } from '../types'
 
-type ImageBlockProps = BlockProps & {
-  itemId: string
-}
-
-export const ImageEdit: FC<ImageBlockProps> = ({ appBridge, itemId }) => {
+export const ImageEdit: FC<ImageEditProps> = ({ appBridge, itemId }) => {
   const { blockAssets, updateAssetIdsFromKey } = useBlockAssets(appBridge)
 
   const [loading, setLoading] = useState(false)

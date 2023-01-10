@@ -9,16 +9,16 @@ import {
   TextInput,
 } from '@frontify/fondue'
 
-import { useState } from 'react'
+import { FC, useState } from 'react'
 
-export const TeaserItemEdit = ({
+export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
   item,
   onTitleModified,
   onLinkModified,
   onRemoveItem,
   onOpenInNewTabModified,
   appBridge,
-}: TeaserItemEditProps) => {
+}) => {
   const [title, setTitle] = useState(item?.title)
 
   const onTitleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
