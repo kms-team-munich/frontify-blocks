@@ -46,6 +46,8 @@ export const ImageEdit: FC<ImageEditProps> = ({ appBridge, itemId }) => {
   const onOpenAssetChooser = () => {
     appBridge.openAssetChooser(assetChooserCallback, {
       selectedValueId: blockAssets[itemId]?.[0]?.id,
+      multiSelection: false,
+      extensions: ['jpg', 'png'],
     })
   }
 
