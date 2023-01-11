@@ -1,6 +1,11 @@
-import { AssetType, SearchResult } from '@frontify/fondue'
+import { SearchResult } from '@frontify/fondue'
 import { BlockProps } from '@frontify/guideline-blocks-settings'
-import { AppBridgeBlock } from '@frontify/app-bridge'
+import {
+  AppBridgeBlock,
+  Asset,
+  AssetChooserOptions,
+} from '@frontify/app-bridge'
+import { CSSProperties } from 'react'
 
 enum TeaserBackground {
   Dark = 'Dark',
@@ -8,8 +13,11 @@ enum TeaserBackground {
   Highlight = 'Highlight',
 }
 
-type ImageEditProps = BlockProps & {
+type AssetEditProps = BlockProps & {
   itemId: string
+  disabled?: boolean
+  assetChooserOptions: AssetChooserOptions
+  buttonLabel?: string
 }
 
 type TeaserItemProps = {
@@ -21,20 +29,31 @@ type TeaserItemEditProps = TeaserItemProps & {
   onLinkModified: (value: SearchResult | null) => void
   onTitleModified: (title: string) => void
   onOpenInNewTabModified: (value: boolean) => void
+  onBlockTypeModified: (value: string | number | undefined) => void
   onRemoveItem: (id: string) => void
 }
 
+type IconProps = {
+  style?: CSSProperties
+  className?: string
+}
+
+type TeaserIconProps = {
+  icon: Asset
+  item?: Omit<Item, 'updatedAt'>
+}
+
 type Link = {
-  link: SearchResult | null
+  link: SearchResult
   openInNewTab: boolean
 }
 
 type Item = {
   id: string
   title: string
-  link: Link
+  target: Link
   updatedAt: number
-  image: AssetType
+  blockType: string | number | undefined
 }
 
 type Settings = {
@@ -48,9 +67,11 @@ type Settings = {
 
 export { TeaserBackground }
 export type {
-  ImageEditProps,
+  AssetEditProps,
   TeaserItemProps,
   TeaserItemEditProps,
+  TeaserIconProps,
+  IconProps,
   Item,
   Settings,
 }

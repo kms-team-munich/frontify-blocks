@@ -1,5 +1,5 @@
 import { Item } from '../types'
-import { AssetType } from '@frontify/fondue'
+import { SearchResult } from '@frontify/fondue'
 
 export const createItem = (): Item => {
   const creationDate = Date.now()
@@ -8,8 +8,8 @@ export const createItem = (): Item => {
   return {
     id,
     title: '',
-    link: { link: null, openInNewTab: false },
+    target: { link: {} as SearchResult, openInNewTab: false },
     updatedAt: creationDate,
-    image: {} as AssetType,
+    blockType: 'link',
   }
 }

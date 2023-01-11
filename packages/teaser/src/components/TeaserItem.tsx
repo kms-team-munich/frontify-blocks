@@ -1,33 +1,65 @@
 import { TeaserBackground, TeaserItemProps } from '../types'
 import { SettingsContext } from '../SettingsContext'
+import { useBlockAssets } from '@frontify/app-bridge'
+import { FC, MouseEvent, useContext } from 'react'
+import { TeaserIcon } from './TeaserIcon'
 
-import { FC, useContext } from 'react'
-
-export const TeaserItem: FC<TeaserItemProps> = ({ item }) => {
+export const TeaserItem: FC<TeaserItemProps> = ({ item, appBridge }) => {
+  console.log('item', item)
   const { background } = useContext(SettingsContext)
 
+  const { blockAssets } = useBlockAssets(appBridge)
+
+  const image = blockAssets[`${item?.id}-img`]?.[0]
+  const icon = blockAssets[`${item?.id}-icon`]?.[0]
+  const file = blockAssets[`${item?.id}-download`]?.[0]
+
   const containerClasses = [
-    'tw-h-[200px] tw-py-3 tw-px-4 tw-text-xl hover:cursor-pointer tw-bg-right-bottom tw-bg-no-repeat tw-bg-contain tw-relative tw-transitions-color tw-duration-200',
+    'tw-h-[200px] tw-text-xl hover:tw-cursor-pointer tw-relative tw-transitions-color tw-duration-200',
     background === TeaserBackground.Light &&
       'tw-bg-zeiss-gray-2 tw-text-zeiss-gray-19 hover:tw-bg-zeiss-gray-5',
     background === TeaserBackground.Dark &&
       'tw-bg-zeiss-gray-21 tw-text-zeiss-gray-4 hover:tw-bg-zeiss-black',
   ].join(' ')
 
+  const downloadFile = (data: File, fileName: string, type = 'text/plain') => {
+    const a = document.createElement('a')
+    a.style.display = 'none'
+    document.body.appendChild(a)
+
+    a.href = window.URL.createObjectURL(new Blob([data], { type }))
+    a.setAttribute('download', fileName)
+
+    a.click()
+
+    // Cleanup
+    window.URL.revokeObjectURL(a.href)
+    document.body.removeChild(a)
+  }
+
+  const handleClick = (e: MouseEvent) => {
+    if (item?.blockType === 'download') {
+      e.preventDefault()
+      // eslint-disable-next-line
+      //@ts-ignore
+      downloadFile(file.originUrl, file.fileName, file.type)
+    }
+  }
+
   return (
-    <div
-      className={containerClasses}
-      style={{
-        backgroundImage:
-          'url(https://static.vecteezy.com/system/resources/previews/001/192/291/original/circle-png.png)',
-      }}
-    >
-      <span className="">{item?.title}</span>
-      <object
-        type="image/svg+xml"
-        data="https://www.svgrepo.com/show/335868/arrow-right.svg"
-        className="tw-w-6 tw-h-6 tw-fill-red-40 tw-absolute tw-left-4 tw-bottom-3"
-      />
+    <div className={containerClasses}>
+      <a className="tw-py-3 tw-px-4" href="" onClick={handleClick}>
+        <div
+          className="tw-absolute tw-h-full tw-w-3/4 tw-right-0 tw-bottom-0 tw-bg-no-repeat tw-bg-contain tw-bg-right-bottom tw-z-0"
+          style={{
+            backgroundImage: image?.previewUrl
+              ? `url(${image.previewUrl})`
+              : '',
+          }}
+        />
+        <span className="tw-relative tw-z-10">{item?.title}</span>
+        <TeaserIcon icon={icon} item={item} />
+      </a>
     </div>
   )
 }

@@ -82,20 +82,23 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
   }
 
   const renderEditable = (
-    { title, id, link, image }: OrderableListItem<Item>,
+    { title, id, target, blockType }: OrderableListItem<Item>,
     { componentDragState }: DragProperties
   ) => {
     const content = (
       <TeaserItemEdit
         key={id}
-        item={{ title, id, link, image }}
+        item={{ title, id, target, blockType }}
         onTitleModified={(title) => updateItem(id, { title })}
-        onLinkModified={(value) =>
-          updateItem(id, { link: { ...link, link: value } })
-        }
+        onLinkModified={(value) => {
+          if (value) {
+            updateItem(id, { target: { ...target, link: value } })
+          }
+        }}
         onOpenInNewTabModified={(value) =>
-          updateItem(id, { link: { ...link, openInNewTab: value } })
+          updateItem(id, { target: { ...target, openInNewTab: value } })
         }
+        onBlockTypeModified={(value) => updateItem(id, { blockType: value })}
         onRemoveItem={removeItem}
         appBridge={appBridge}
       />

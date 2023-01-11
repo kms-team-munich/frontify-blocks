@@ -10,7 +10,8 @@
     "@frontify/app-bridge": "3.0.0-beta.31",
     "@frontify/fondue": "12.0.0-beta.31",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-svg": "^15.1.18"
   },
   "devDependencies": {
     "@frontify/eslint-config-react": "0.15.5",
