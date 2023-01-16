@@ -40,7 +40,7 @@ export const settings = defineSettings({
       ],
     },
     {
-      id: 'blackgroundGlobal',
+      id: 'backgroundGlobal',
       label: 'Globaler Background',
       type: 'switch',
     },

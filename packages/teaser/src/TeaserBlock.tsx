@@ -16,7 +16,7 @@ import {
 } from '@frontify/fondue'
 
 import { BlockProps } from '@frontify/guideline-blocks-settings'
-import { Item, Settings } from './types'
+import { Item, Settings, TeaserBackground } from './types'
 
 import 'tailwindcss/tailwind.css'
 
@@ -25,7 +25,8 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
   const [blockSettings, setBlockSettings] =
     useBlockSettings<Settings>(appBridge)
 
-  const { items } = blockSettings
+  const { items, title, copy, footer, background, backgroundGlobal } =
+    blockSettings
 
   const orderableListItems: OrderableListItem<Item>[] =
     items?.map((item: Item, index: number) => {
@@ -114,15 +115,56 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
     )
   }
 
+  // Styling
+  const containerClassesArray = ['tw-flex tw-flex-col tw-gap-8']
+  const headerClassesArray = ['tw-flex tw-flex-col tw-gap-6']
+  const teaserClassesArray = ['tw-grid tw-grid-cols-2']
+
+  let teaser = ''
+  let container = ''
+  let header = ''
+
+  if (backgroundGlobal) {
+    if (background === TeaserBackground.Light) {
+      container = 'tw-bg-zeiss-gray-2 tw-text-zeiss-gray-19'
+      teaser = 'tw-border-t tw-border-white tw-bg-white tw-gap-px'
+    } else if (background === TeaserBackground.Dark) {
+      container = 'tw-bg-zeiss-gray-21 tw-text-zeiss-gray-4'
+      teaser =
+        'tw-border-t tw-border-zeiss-gray-19 tw-bg-zeiss-gray-19 tw-gap-px'
+    }
+
+    header = 'tw-pt-3 tw-px-4'
+  } else {
+    teaser = 'tw-gap-2'
+  }
+
+  containerClassesArray.push(container)
+  teaserClassesArray.push(teaser)
+  headerClassesArray.push(header)
+
+  const containerClasses = containerClassesArray.join(' ')
+  const headerClasses = headerClassesArray.join(' ')
+  const teaserClasses = teaserClassesArray.join(' ')
+
   return (
     <SettingsContext.Provider value={blockSettings}>
       {!isEditing && (
-        <div className="tw-grid tw-grid-cols-2 tw-gap-2">
-          {items?.map((item: Item) => {
-            return (
-              <TeaserItem key={item.id} item={item} appBridge={appBridge} />
-            )
-          })}
+        <div className="tw-flex tw-flex-col tw-gap-6">
+          <div className={containerClasses}>
+            <div className={headerClasses}>
+              <div className="tw-type-headline">{title}</div>
+              {copy && <p>{copy}</p>}
+            </div>
+            <div className={teaserClasses}>
+              {items?.map((item: Item) => {
+                return (
+                  <TeaserItem key={item.id} item={item} appBridge={appBridge} />
+                )
+              })}
+            </div>
+          </div>
+          <div>{footer}</div>
         </div>
       )}
 

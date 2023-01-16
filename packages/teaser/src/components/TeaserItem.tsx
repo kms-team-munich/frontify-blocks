@@ -5,9 +5,7 @@ import { FC, MouseEvent, useContext } from 'react'
 import { TeaserIcon } from './TeaserIcon'
 
 export const TeaserItem: FC<TeaserItemProps> = ({ item, appBridge }) => {
-  console.log('item', item)
   const { background } = useContext(SettingsContext)
-
   const { blockAssets } = useBlockAssets(appBridge)
 
   const image = blockAssets[`${item?.id}-img`]?.[0]
@@ -48,7 +46,7 @@ export const TeaserItem: FC<TeaserItemProps> = ({ item, appBridge }) => {
 
   return (
     <div className={containerClasses}>
-      <a className="tw-py-3 tw-px-4" href="" onClick={handleClick}>
+      <a className="tw-block tw-py-3 tw-px-4" href="" onClick={handleClick}>
         <div
           className="tw-absolute tw-h-full tw-w-3/4 tw-right-0 tw-bottom-0 tw-bg-no-repeat tw-bg-contain tw-bg-right-bottom tw-z-0"
           style={{

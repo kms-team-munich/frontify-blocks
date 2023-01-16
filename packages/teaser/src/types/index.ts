@@ -57,7 +57,7 @@ type Item = {
 }
 
 type Settings = {
-  headline: string
+  title: string
   copy: string
   items: Item[]
   footer: string
