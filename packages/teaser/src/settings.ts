@@ -7,16 +7,6 @@ export const settings = defineSettings({
       type: 'input',
       label: 'Title',
     },
-    {
-      id: 'copy',
-      type: 'textarea',
-      label: 'Copy',
-    },
-    {
-      id: 'footer',
-      type: 'textarea',
-      label: 'Footer',
-    },
   ],
   style: [
     {
