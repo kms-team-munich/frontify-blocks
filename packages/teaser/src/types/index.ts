@@ -6,6 +6,7 @@ import {
   AssetChooserOptions,
 } from '@frontify/app-bridge'
 import { CSSProperties } from 'react'
+import { BaseText } from 'slate'
 
 enum TeaserBackground {
   Dark = 'Dark',
@@ -65,6 +66,19 @@ type Settings = {
   backgroundGlobal: boolean
 }
 
+type Spread<Type> = { [Key in keyof Type]: Type[Key] }
+
+type RichText = Spread<
+  BaseText & {
+    bold?: boolean
+    italic?: boolean
+    url?: string
+    target?: string
+    type: string
+    children: RichText[]
+  }
+>
+
 export { TeaserBackground }
 export type {
   AssetEditProps,
@@ -74,4 +88,5 @@ export type {
   IconProps,
   Item,
   Settings,
+  RichText,
 }

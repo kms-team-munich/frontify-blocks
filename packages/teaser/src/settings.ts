@@ -9,12 +9,12 @@ export const settings = defineSettings({
     },
     {
       id: 'copy',
-      type: 'input',
+      type: 'textarea',
       label: 'Copy',
     },
     {
       id: 'footer',
-      type: 'input',
+      type: 'textarea',
       label: 'Footer',
     },
   ],

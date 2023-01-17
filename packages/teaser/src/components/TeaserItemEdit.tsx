@@ -96,7 +96,7 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
   ]
 
   return (
-    <div className="tw-p-5 hover:tw-cursor-pointer tw-border tw-border-dashed tw-border-[rgba(0,0,0,0.3)] hover:tw-border-black tw-flex tw-flex-col tw-gap-2">
+    <div className="tw-p-5 hover:tw-cursor-pointer tw-rounded tw-border hover:tw-border-black-90 tw-border-black-20 tw-flex tw-flex-col tw-gap-2">
       <MultiInput layout={MultiInputLayout.Columns}>
         <Dropdown
           menuBlocks={blockTypeMenuBlocks}

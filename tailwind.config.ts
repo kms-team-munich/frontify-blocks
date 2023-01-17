@@ -21,6 +21,9 @@ const config = <Partial<Config>>{
             19: 'rgb(50 55 62)',
             21: 'rgb(32 35 39)',
           },
+          azure: {
+            90: 'rgb(0 114 239)',
+          },
           black: 'rgb(0 0 0)',
           white: 'rgb(255 255 255)',
         },
@@ -33,7 +36,7 @@ const config = <Partial<Config>>{
         '.type-headline': {
           fontSize: '2rem',
           lineHeight: '120%',
-          fontWeight: '800',
+          fontWeight: '700',
         },
         '.type-copy': { fontSize: '1rem', lineHeight: '150%' },
         '.type-description': { fontSize: '1.25rem', lineHeight: '120%' },

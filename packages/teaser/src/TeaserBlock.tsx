@@ -4,7 +4,8 @@ import { useBlockSettings, useEditorState } from '@frontify/app-bridge'
 import { SettingsContext } from './SettingsContext'
 import { TeaserItem } from './components/TeaserItem'
 import { TeaserItemEdit } from './components/TeaserItemEdit'
-import { createItem, updateItemById } from './helpers'
+import { createItem, serialize, updateItemById } from './helpers'
+import parseHtml from 'html-react-parser'
 
 import {
   Button,
@@ -13,21 +14,70 @@ import {
   ItemDragState,
   OrderableList,
   OrderableListItem,
+  RichTextEditor,
+  TextInput,
 } from '@frontify/fondue'
 
 import { BlockProps } from '@frontify/guideline-blocks-settings'
-import { Item, Settings, TeaserBackground } from './types'
+import { Item, RichText, Settings, TeaserBackground } from './types'
+import { useState } from 'react'
 
 import 'tailwindcss/tailwind.css'
 
 export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
   const isEditing = useEditorState(appBridge)
+
   const [blockSettings, setBlockSettings] =
     useBlockSettings<Settings>(appBridge)
-
   const { items, title, copy, footer, background, backgroundGlobal } =
     blockSettings
 
+  // Title
+  const [mappedTitle, setMappedTitle] = useState(title)
+
+  const onTitleChange = (newValue: string) => {
+    setMappedTitle(newValue)
+    setBlockSettings({
+      title: newValue,
+    })
+  }
+  const onTitleBlur = () => {
+    setBlockSettings({
+      title: mappedTitle,
+    })
+  }
+
+  // Copy
+  const [mappedCopy, setMappedCopy] = useState(copy)
+
+  const onCopyChange = (newValue: string) => {
+    setMappedCopy(newValue)
+    setBlockSettings({
+      copy: newValue,
+    })
+  }
+  const onCopyBlur = () => {
+    setBlockSettings({
+      copy: mappedCopy,
+    })
+  }
+
+  // Footer
+  const [mappedFooter, setMappedFooter] = useState(footer)
+
+  const onFooterChange = (newValue: string) => {
+    setMappedFooter(newValue)
+    setBlockSettings({
+      footer: newValue,
+    })
+  }
+  const onFooterBlur = () => {
+    setBlockSettings({
+      footer: mappedFooter,
+    })
+  }
+
+  // List
   const orderableListItems: OrderableListItem<Item>[] =
     items?.map((item: Item, index: number) => {
       return {
@@ -154,7 +204,13 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
           <div className={containerClasses}>
             <div className={headerClasses}>
               <div className="tw-type-headline">{title}</div>
-              {copy && <p>{copy}</p>}
+              {copy && (
+                <div className="tw-max-w-[600px] tw-whitespace-pre">
+                  {parseHtml(
+                    serialize({ children: JSON.parse(copy) } as RichText)
+                  )}
+                </div>
+              )}
             </div>
             <div className={teaserClasses}>
               {items?.map((item: Item) => {
@@ -164,12 +220,32 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
               })}
             </div>
           </div>
-          <div>{footer}</div>
+          {footer && (
+            <div className="tw-max-w-[600px] tw-whitespace-pre">
+              {parseHtml(
+                serialize({ children: JSON.parse(footer) } as RichText)
+              )}
+            </div>
+          )}
         </div>
       )}
 
       {isEditing && (
         <div className="tw-flex tw-flex-col tw-gap-5">
+          <div className="tw-flex tw-flex-col tw-gap-2">
+            <TextInput
+              value={mappedTitle}
+              onChange={onTitleChange}
+              onBlur={onTitleBlur}
+            />
+            <div className="tw-border tw-px-3 tw-py-1 tw-min-h-[2.25rem] tw-rounded tw-border focus-within:tw-border-black-90 hover:tw-border-black-90 tw-border-black-20">
+              <RichTextEditor
+                value={mappedCopy}
+                onTextChange={onCopyChange}
+                onBlur={onCopyBlur}
+              />
+            </div>
+          </div>
           <OrderableList
             items={orderableListItems}
             dragDisabled={!isEditing}
@@ -180,6 +256,13 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
             <Button size={ButtonSize.Medium} onClick={() => addNewItem()}>
               Add
             </Button>
+          </div>
+          <div className="tw-border tw-px-3 tw-py-1 tw-min-h-[2.25rem] tw-rounded tw-border focus-within:tw-border-black-90 hover:tw-border-black-90 tw-border-black-20">
+            <RichTextEditor
+              value={mappedFooter}
+              onTextChange={onFooterChange}
+              onBlur={onFooterBlur}
+            />
           </div>
         </div>
       )}
