@@ -8,12 +8,17 @@ import { createItem, serialize, updateItemById } from './helpers'
 import parseHtml from 'html-react-parser'
 
 import {
+  BoldPlugin,
   Button,
   ButtonSize,
   DragProperties,
+  InitPlugin,
+  ItalicPlugin,
   ItemDragState,
+  LinkPlugin,
   OrderableList,
   OrderableListItem,
+  PluginComposer,
   RichTextEditor,
   TextInput,
 } from '@frontify/fondue'
@@ -23,6 +28,13 @@ import { Item, RichText, Settings, TeaserBackground } from './types'
 import { useState } from 'react'
 
 import 'tailwindcss/tailwind.css'
+
+const customPlugins = new PluginComposer()
+
+customPlugins
+  .setPlugin([new InitPlugin()])
+  .setPlugin([new LinkPlugin()])
+  .setPlugin([new ItalicPlugin(), new BoldPlugin()])
 
 export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
   const isEditing = useEditorState(appBridge)
@@ -243,6 +255,7 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
                 value={mappedCopy}
                 onTextChange={onCopyChange}
                 onBlur={onCopyBlur}
+                plugins={customPlugins}
               />
             </div>
           </div>
@@ -262,6 +275,7 @@ export const TeaserBlock: FC<BlockProps> = ({ appBridge }) => {
               value={mappedFooter}
               onTextChange={onFooterChange}
               onBlur={onFooterBlur}
+              plugins={customPlugins}
             />
           </div>
         </div>

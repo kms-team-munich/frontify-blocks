@@ -25,7 +25,7 @@ const serialize = (node: RichText) => {
       case 'a':
         return `<a href="${escapeHtml(node.url)}" target="${
           node.target
-        }" class="tw-text-zeiss-azure-90">${children}</a>`
+        }" class="tw-text-zeiss-azure-90 tw-font-medium">${children} →</a>`
       default:
         return children
     }
