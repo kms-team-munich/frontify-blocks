@@ -34,8 +34,8 @@ export const settings = defineSettings({
           label: 'Dark',
         },
         {
-          value: 'Highlight',
-          label: 'Highlight',
+          value: 'Azure',
+          label: 'Azure',
         },
       ],
     },

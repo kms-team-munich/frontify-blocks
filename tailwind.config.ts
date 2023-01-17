@@ -23,6 +23,7 @@ const config = <Partial<Config>>{
           },
           azure: {
             90: 'rgb(0 114 239)',
+            100: 'rgb(0 82 170)',
           },
           black: 'rgb(0 0 0)',
           white: 'rgb(255 255 255)',

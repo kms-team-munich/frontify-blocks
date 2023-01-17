@@ -18,6 +18,8 @@ export const TeaserItem: FC<TeaserItemProps> = ({ item, appBridge }) => {
       'tw-bg-zeiss-gray-2 tw-text-zeiss-gray-19 hover:tw-bg-zeiss-gray-5',
     background === TeaserBackground.Dark &&
       'tw-bg-zeiss-gray-21 tw-text-zeiss-gray-4 hover:tw-bg-zeiss-black',
+    background === TeaserBackground.Azure &&
+      'tw-bg-zeiss-azure-90 tw-text-white hover:tw-bg-zeiss-ahzure-100',
   ].join(' ')
 
   const downloadFile = (data: File, fileName: string, type = 'text/plain') => {

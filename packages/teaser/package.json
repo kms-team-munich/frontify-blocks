@@ -8,9 +8,10 @@
   },
   "dependencies": {
     "@frontify/app-bridge": "3.0.0-beta.31",
-    "@frontify/fondue": "12.0.0-beta.31",
+    "@frontify/fondue": "12.0.0-beta.35",
     "escape-html": "^1.0.3",
     "html-react-parser": "^3.0.7",
+    "postcss": "8.4.19",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-svg": "^15.1.18",

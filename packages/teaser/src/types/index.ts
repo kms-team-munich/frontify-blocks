@@ -11,7 +11,7 @@ import { BaseText } from 'slate'
 enum TeaserBackground {
   Dark = 'Dark',
   Light = 'Light',
-  Highlight = 'Highlight',
+  Azure = 'Azure',
 }
 
 type AssetEditProps = BlockProps & {
