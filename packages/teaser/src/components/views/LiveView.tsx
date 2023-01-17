@@ -47,6 +47,14 @@ export const LiveView: FC<BlockProps> = ({ appBridge }) => {
   const headerClasses = headerClassesArray.join(' ')
   const teaserClasses = teaserClassesArray.join(' ')
 
+  const parsedCopy = parseHtml(
+    serialize(
+      { children: JSON.parse(copy) } as RichText,
+      background === TeaserBackground.Azure && backgroundGlobal
+        ? 'tw-text-white tw-font-medium'
+        : 'tw-text-zeiss-azure-90 tw-font-medium'
+    )
+  )
   return (
     <div className="tw-flex tw-flex-col tw-gap-6">
       <div className={containerClasses}>
@@ -54,7 +62,7 @@ export const LiveView: FC<BlockProps> = ({ appBridge }) => {
           <div className="tw-type-headline">{title}</div>
           {copy && (
             <div className="tw-max-w-[600px] tw-whitespace-pre">
-              {parseHtml(serialize({ children: JSON.parse(copy) } as RichText))}
+              {parsedCopy}
             </div>
           )}
         </div>
@@ -67,7 +75,7 @@ export const LiveView: FC<BlockProps> = ({ appBridge }) => {
         </div>
       </div>
       {footer && (
-        <div className="tw-max-w-[600px] tw-whitespace-pre">
+        <div className="tw-max-w-[600px] tw-whitespace-pre tw-text-zeiss-gray-16">
           {parseHtml(serialize({ children: JSON.parse(footer) } as RichText))}
         </div>
       )}

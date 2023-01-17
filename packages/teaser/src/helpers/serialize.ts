@@ -1,7 +1,11 @@
 import escapeHtml from 'escape-html'
 import { RichText } from '../types'
 
-const serialize = (node: RichText) => {
+const serialize = (
+  node: RichText,
+  linkClass = 'tw-text-zeiss-azure-90 tw-font-medium'
+) => {
+  console.log('linkClass', linkClass)
   console.log('node', node)
   if (node.text) {
     let string = escapeHtml(node.text)
@@ -16,7 +20,7 @@ const serialize = (node: RichText) => {
     return string
   } else if (node.children) {
     const children: string = node.children
-      .map((n: RichText) => serialize(n))
+      .map((n: RichText) => serialize(n, linkClass))
       .join('')
 
     switch (node.type) {
@@ -25,7 +29,7 @@ const serialize = (node: RichText) => {
       case 'a':
         return `<a href="${escapeHtml(node.url)}" target="${
           node.target
-        }" class="tw-text-zeiss-azure-90 tw-font-medium">${children} →</a>`
+        }" class="${linkClass}">${children} →</a>`
       default:
         return children
     }
