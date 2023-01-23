@@ -150,9 +150,6 @@ export const EditView: FC<BlockProps> = ({ appBridge }) => {
             updateItem(id, { target: { ...target, link: value } })
           }
         }}
-        onOpenInNewTabModified={(value) =>
-          updateItem(id, { target: { ...target, openInNewTab: value } })
-        }
         onBlockTypeModified={(value) => updateItem(id, { blockType: value })}
         onRemoveItem={removeItem}
         appBridge={appBridge}
@@ -182,6 +179,7 @@ export const EditView: FC<BlockProps> = ({ appBridge }) => {
             value={mappedCopy}
             onTextChange={onCopyChange}
             onBlur={onCopyBlur}
+            plugins={richTextPlugins}
           />
         </div>
       </div>

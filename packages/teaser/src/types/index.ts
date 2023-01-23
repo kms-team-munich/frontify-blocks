@@ -1,4 +1,3 @@
-import { SearchResult } from '@frontify/fondue'
 import { BlockProps } from '@frontify/guideline-blocks-settings'
 import {
   AppBridgeBlock,
@@ -27,9 +26,9 @@ type TeaserItemProps = {
 }
 
 type TeaserItemEditProps = TeaserItemProps & {
-  onLinkModified: (value: SearchResult | null) => void
+  onLinkModified: (value: string) => void
   onTitleModified: (title: string) => void
-  onOpenInNewTabModified: (value: boolean) => void
+  onOpenInNewTabModified?: (value: boolean) => void
   onBlockTypeModified: (value: string | number | undefined) => void
   onRemoveItem: (id: string) => void
 }
@@ -45,7 +44,7 @@ type TeaserIconProps = {
 }
 
 type Link = {
-  link: SearchResult
+  link: string
   openInNewTab: boolean
 }
 

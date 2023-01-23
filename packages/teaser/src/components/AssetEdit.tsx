@@ -72,7 +72,7 @@ export const AssetEdit: FC<AssetEditProps> = ({
   const asset = blockAssets?.[itemId]?.[0]
 
   const containerClasses = [
-    'tw-relative tw-w-full tw-p-2 tw-h-full tw-max-h-16 tw-flex tw-justify-end tw-items-end tw-gap-4 tw-border tw-rounded tw-border-black-20',
+    'tw-relative tw-w-full tw-p-1 tw-h-full tw-max-h-16 tw-flex tw-justify-end tw-items-end tw-gap-4 tw-border tw-rounded tw-border-black-20',
     disabled && 'tw-user-select-none tw-border-black-5 tw-bg-black-5',
   ].join(' ')
 

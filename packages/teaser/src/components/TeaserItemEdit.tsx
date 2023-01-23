@@ -7,7 +7,6 @@ import {
   ButtonSize,
   Dropdown,
   IconTrashBin,
-  LinkChooser,
   MenuItemContentSize,
   MultiInput,
   MultiInputLayout,
@@ -22,9 +21,10 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
   onLinkModified,
   onBlockTypeModified,
   onRemoveItem,
-  onOpenInNewTabModified,
   appBridge,
 }) => {
+  const [target] = useState(item?.target)
+  const [link, setLink] = useState(target?.link)
   const [title, setTitle] = useState(item?.title)
   const [blockType, setBlockType] = useState(item?.blockType)
   const { blockAssets, deleteAssetIdsFromKey } = useBlockAssets(appBridge)
@@ -39,6 +39,18 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
   const onTitleChange = (newValue: string) => {
     setTitle(newValue)
     if (onTitleModified) onTitleModified(newValue)
+  }
+
+  const onLinkChange = (newValue: string) => {
+    setLink(newValue)
+    if (onLinkModified) onLinkModified(newValue)
+  }
+
+  const onLinkBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
+    const target = event.target as HTMLInputElement
+    const value = target.value
+
+    if (onLinkModified) onLinkModified(value)
   }
 
   const onBlockTypeChange = (newValue: string | number | undefined) => {
@@ -104,6 +116,7 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
           activeItemId={blockType}
         />
         <TextInput
+          placeholder="Title"
           value={title}
           onChange={onTitleChange}
           onBlur={onTitleBlur}
@@ -129,11 +142,12 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
           assetChooserOptions={downloadAssetChooserOptions}
           buttonLabel="Choose file"
         />
-        <LinkChooser
+        <TextInput
+          placeholder="Link"
+          value={link}
           disabled={blockType !== 'link'}
-          onLinkChange={onLinkModified}
-          onOpenInNewTabChange={onOpenInNewTabModified}
-          openInNewTab={item?.target?.openInNewTab || false}
+          onChange={onLinkChange}
+          onBlur={onLinkBlur}
         />
       </MultiInput>
       <div className="tw-mt-auto tw-self-end">

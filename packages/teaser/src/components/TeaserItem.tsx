@@ -48,7 +48,11 @@ export const TeaserItem: FC<TeaserItemProps> = ({ item, appBridge }) => {
 
   return (
     <div className={containerClasses}>
-      <a className="tw-block tw-py-3 tw-px-4" href="" onClick={handleClick}>
+      <a
+        className="tw-block tw-py-3 tw-px-4"
+        href={item?.blockType === 'link' ? item?.target?.link : ''}
+        onClick={handleClick}
+      >
         <div
           className="tw-absolute tw-h-full tw-w-3/4 tw-right-0 tw-bottom-0 tw-bg-no-repeat tw-bg-contain tw-bg-right-bottom tw-z-0"
           style={{
