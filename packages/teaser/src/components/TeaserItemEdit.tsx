@@ -2,18 +2,26 @@ import { TeaserItemEditProps } from '../types'
 import { AssetEdit } from './AssetEdit'
 import { useBlockAssets } from '@frontify/app-bridge'
 import {
+  BoldPlugin,
   Button,
   ButtonEmphasis,
   ButtonSize,
   Dropdown,
   IconTrashBin,
+  InitPlugin,
   MenuItemContentSize,
   MultiInput,
   MultiInputLayout,
+  PluginComposer,
+  RichTextEditor,
   TextInput,
 } from '@frontify/fondue'
 
 import { FC, useState } from 'react'
+
+const richTextPlugins = new PluginComposer()
+
+richTextPlugins.setPlugin([new InitPlugin()]).setPlugin([new BoldPlugin()])
 
 export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
   item,
@@ -29,11 +37,9 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
   const [blockType, setBlockType] = useState(item?.blockType)
   const { blockAssets, deleteAssetIdsFromKey } = useBlockAssets(appBridge)
 
-  const onTitleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
-    const target = event.target as HTMLInputElement
-    const value = target.value
-
-    if (onTitleModified) onTitleModified(value)
+  const onTitleBlur = () => {
+    if (!title) return
+    if (onTitleModified) onTitleModified(title)
   }
 
   const onTitleChange = (newValue: string) => {
@@ -109,19 +115,20 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
 
   return (
     <div className="tw-p-5 hover:tw-cursor-pointer tw-rounded tw-border hover:tw-border-black-90 tw-border-black-20 tw-flex tw-flex-col tw-gap-2">
-      <MultiInput layout={MultiInputLayout.Columns}>
-        <Dropdown
-          menuBlocks={blockTypeMenuBlocks}
-          onChange={onBlockTypeChange}
-          activeItemId={blockType}
-        />
-        <TextInput
-          placeholder="Title"
+      <Dropdown
+        menuBlocks={blockTypeMenuBlocks}
+        onChange={onBlockTypeChange}
+        activeItemId={blockType}
+      />
+      <div className="tw-border tw-px-3 tw-py-1 tw-min-h-[2.25rem] tw-rounded tw-border focus-within:tw-border-black-90 hover:tw-border-black-90 tw-border-black-20">
+        <RichTextEditor
           value={title}
-          onChange={onTitleChange}
+          onTextChange={onTitleChange}
           onBlur={onTitleBlur}
+          plugins={richTextPlugins}
         />
-      </MultiInput>
+      </div>
+
       <MultiInput layout={MultiInputLayout.Columns}>
         <AssetEdit
           appBridge={appBridge}
