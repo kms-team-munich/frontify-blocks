@@ -62,7 +62,7 @@ export const LiveView: FC<BlockProps> = ({ appBridge }) => {
         <div className={headerClasses}>
           <div className="tw-type-headline">{title}</div>
           {copy && (
-            <div className="tw-max-w-[640px] tw-whitespace-pre-line">
+            <div className="tw-max-w-full tw-whitespace-pre-line">
               {parsedCopy}
             </div>
           )}
