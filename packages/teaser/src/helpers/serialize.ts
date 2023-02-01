@@ -5,8 +5,6 @@ const serialize = (
   node: RichText,
   linkClass = 'tw-text-zeiss-azure-90 tw-font-medium'
 ) => {
-  console.log('linkClass', linkClass)
-  console.log('node', node)
   if (node.text) {
     let string = escapeHtml(node.text)
 

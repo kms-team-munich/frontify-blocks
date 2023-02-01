@@ -1,5 +1,4 @@
 import { Item } from '../types'
-import { SearchResult } from '@frontify/fondue'
 
 export const createItem = (): Item => {
   const creationDate = Date.now()
@@ -7,8 +6,8 @@ export const createItem = (): Item => {
 
   return {
     id,
-    title: '',
-    target: { link: {} as SearchResult, openInNewTab: false },
+    title: 'Title',
+    target: { link: 'copy link here', openInNewTab: true },
     updatedAt: creationDate,
     blockType: 'link',
   }

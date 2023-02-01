@@ -2,19 +2,26 @@ import { TeaserItemEditProps } from '../types'
 import { AssetEdit } from './AssetEdit'
 import { useBlockAssets } from '@frontify/app-bridge'
 import {
+  BoldPlugin,
   Button,
   ButtonEmphasis,
   ButtonSize,
   Dropdown,
   IconTrashBin,
-  LinkChooser,
+  InitPlugin,
   MenuItemContentSize,
   MultiInput,
   MultiInputLayout,
+  PluginComposer,
+  RichTextEditor,
   TextInput,
 } from '@frontify/fondue'
 
 import { FC, useState } from 'react'
+
+const richTextPlugins = new PluginComposer()
+
+richTextPlugins.setPlugin([new InitPlugin()]).setPlugin([new BoldPlugin()])
 
 export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
   item,
@@ -22,23 +29,34 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
   onLinkModified,
   onBlockTypeModified,
   onRemoveItem,
-  onOpenInNewTabModified,
   appBridge,
 }) => {
+  const [target] = useState(item?.target)
+  const [link, setLink] = useState(target?.link)
   const [title, setTitle] = useState(item?.title)
   const [blockType, setBlockType] = useState(item?.blockType)
   const { blockAssets, deleteAssetIdsFromKey } = useBlockAssets(appBridge)
 
-  const onTitleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
-    const target = event.target as HTMLInputElement
-    const value = target.value
-
-    if (onTitleModified) onTitleModified(value)
+  const onTitleBlur = () => {
+    if (!title) return
+    if (onTitleModified) onTitleModified(title)
   }
 
   const onTitleChange = (newValue: string) => {
     setTitle(newValue)
     if (onTitleModified) onTitleModified(newValue)
+  }
+
+  const onLinkChange = (newValue: string) => {
+    setLink(newValue)
+    if (onLinkModified) onLinkModified(newValue)
+  }
+
+  const onLinkBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
+    const target = event.target as HTMLInputElement
+    const value = target.value
+
+    if (onLinkModified) onLinkModified(value)
   }
 
   const onBlockTypeChange = (newValue: string | number | undefined) => {
@@ -97,18 +115,20 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
 
   return (
     <div className="tw-p-5 hover:tw-cursor-pointer tw-rounded tw-border hover:tw-border-black-90 tw-border-black-20 tw-flex tw-flex-col tw-gap-2">
-      <MultiInput layout={MultiInputLayout.Columns}>
-        <Dropdown
-          menuBlocks={blockTypeMenuBlocks}
-          onChange={onBlockTypeChange}
-          activeItemId={blockType}
-        />
-        <TextInput
+      <Dropdown
+        menuBlocks={blockTypeMenuBlocks}
+        onChange={onBlockTypeChange}
+        activeItemId={blockType}
+      />
+      <div className="tw-border tw-px-3 tw-py-1 tw-min-h-[2.25rem] tw-rounded tw-border focus-within:tw-border-black-90 hover:tw-border-black-90 tw-border-black-20">
+        <RichTextEditor
           value={title}
-          onChange={onTitleChange}
+          onTextChange={onTitleChange}
           onBlur={onTitleBlur}
+          plugins={richTextPlugins}
         />
-      </MultiInput>
+      </div>
+
       <MultiInput layout={MultiInputLayout.Columns}>
         <AssetEdit
           appBridge={appBridge}
@@ -129,11 +149,12 @@ export const TeaserItemEdit: FC<TeaserItemEditProps> = ({
           assetChooserOptions={downloadAssetChooserOptions}
           buttonLabel="Choose file"
         />
-        <LinkChooser
+        <TextInput
+          placeholder="Link"
+          value={link}
           disabled={blockType !== 'link'}
-          onLinkChange={onLinkModified}
-          onOpenInNewTabChange={onOpenInNewTabModified}
-          openInNewTab={item?.target?.openInNewTab || false}
+          onChange={onLinkChange}
+          onBlur={onLinkBlur}
         />
       </MultiInput>
       <div className="tw-mt-auto tw-self-end">

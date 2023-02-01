@@ -1,8 +1,10 @@
-import { TeaserBackground, TeaserItemProps } from '../types'
+import { RichText, TeaserBackground, TeaserItemProps } from '../types'
 import { SettingsContext } from '../SettingsContext'
 import { useBlockAssets } from '@frontify/app-bridge'
 import { FC, MouseEvent, useContext } from 'react'
 import { TeaserIcon } from './TeaserIcon'
+import { serialize } from '../helpers'
+import parseHtml from 'html-react-parser'
 
 export const TeaserItem: FC<TeaserItemProps> = ({ item, appBridge }) => {
   const { background } = useContext(SettingsContext)
@@ -48,7 +50,11 @@ export const TeaserItem: FC<TeaserItemProps> = ({ item, appBridge }) => {
 
   return (
     <div className={containerClasses}>
-      <a className="tw-block tw-py-3 tw-px-4" href="" onClick={handleClick}>
+      <a
+        className="tw-block tw-py-3 tw-px-4"
+        href={item?.blockType === 'link' ? item?.target?.link : ''}
+        onClick={handleClick}
+      >
         <div
           className="tw-absolute tw-h-full tw-w-3/4 tw-right-0 tw-bottom-0 tw-bg-no-repeat tw-bg-contain tw-bg-right-bottom tw-z-0"
           style={{
@@ -57,7 +63,11 @@ export const TeaserItem: FC<TeaserItemProps> = ({ item, appBridge }) => {
               : '',
           }}
         />
-        <span className="tw-relative tw-z-10">{item?.title}</span>
+        <span className="tw-relative tw-z-10">
+          {parseHtml(
+            serialize({ children: JSON.parse(item?.title || '') } as RichText)
+          )}
+        </span>
         <TeaserIcon icon={icon} item={item} />
       </a>
     </div>

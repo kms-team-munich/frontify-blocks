@@ -37,6 +37,7 @@ export const LiveView: FC<BlockProps> = ({ appBridge }) => {
     header = 'tw-pt-3 tw-px-4'
   } else {
     teaser = 'tw-gap-2'
+    container = 'tw-text-zeiss-gray-19'
   }
 
   containerClassesArray.push(container)
@@ -61,7 +62,7 @@ export const LiveView: FC<BlockProps> = ({ appBridge }) => {
         <div className={headerClasses}>
           <div className="tw-type-headline">{title}</div>
           {copy && (
-            <div className="tw-max-w-[600px] tw-whitespace-pre">
+            <div className="tw-max-w-full tw-whitespace-pre-line">
               {parsedCopy}
             </div>
           )}
