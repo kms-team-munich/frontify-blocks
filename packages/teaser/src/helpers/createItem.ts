@@ -6,7 +6,7 @@ export const createItem = (): Item => {
 
   return {
     id,
-    title: 'Title',
+    title: '[{"type":"p","children":[{"text":"Teaser Title"}]}]',
     target: { link: 'copy link here', openInNewTab: true },
     updatedAt: creationDate,
     blockType: 'link',

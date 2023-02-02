@@ -166,6 +166,17 @@ export const EditView: FC<BlockProps> = ({ appBridge }) => {
     )
   }
 
+  // fill undefined values with default values
+  if (mappedTitle === undefined) {
+    onTitleChange('Title')
+  }
+  if (mappedCopy === undefined) {
+    onCopyChange('[{"type":"p","children":[{"text":"Copy"}]}]')
+  }
+  if (mappedFooter === undefined) {
+    onFooterChange('[{"type":"p","children":[{"text":"Footer"}]}]')
+  }
+
   return (
     <div className="tw-flex tw-flex-col tw-gap-5">
       <div className="tw-flex tw-flex-col tw-gap-2">
