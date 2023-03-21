@@ -15,7 +15,7 @@ export const TeaserItem: FC<TeaserItemProps> = ({ item, appBridge }) => {
   const file = blockAssets[`${item?.id}-download`]?.[0]
 
   const containerClasses = [
-    'tw-h-[200px] tw-text-xl hover:tw-cursor-pointer tw-relative tw-transitions-color tw-duration-200',
+    'tw-h-[200px] tw-type-description hover:tw-cursor-pointer tw-relative tw-transitions-color tw-duration-200',
     background === TeaserBackground.Light &&
       'tw-bg-zeiss-gray-2 tw-text-zeiss-gray-19 hover:tw-bg-zeiss-gray-5',
     background === TeaserBackground.Dark &&
